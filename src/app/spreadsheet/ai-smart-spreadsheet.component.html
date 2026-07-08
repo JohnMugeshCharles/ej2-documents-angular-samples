@@ -1,0 +1,75 @@
+<div class="control-pane">
+    <div class="control-section">
+        <div id="spreadsheet-maincontent">
+            <ejs-spreadsheet id="spreadsheet" #spreadsheet [openUrl]="openUrl" [saveUrl]="saveUrl" [sheets]="sheet" [height]="height"
+                (created)="onCreate()" enableAIAssist="true" [aiAssistSettings]="aiAssistSettings" (promptRequest)="onPromptRequestHandler($event)">
+            </ejs-spreadsheet>
+        </div>
+    </div>
+
+    <div id="action-description">
+        <p>This demo showcases the AI Assist integration in Syncfusion Spreadsheet Angular sample, enabling users to interact with their data more efficiently. Users can perform a wide range of spreadsheet
+            operations-such as formatting data, generating insights, creating charts, sorting & filtering, and summarizing using simple prompts.</p>
+    </div>
+    <div id="description">
+        <p>This sample demonstrates the <strong>Built-in AI Assist</strong> functionality in the Spreadsheet component, enabling users to perform a wide range of spreadsheet tasks seamlessly.</p>
+        <p>
+            The AI Assist capability includes chat-based interaction with prompt suggestions and support for a resizable layout.
+            All actions triggered through AI are executed directly in the spreadsheet with undo/redo support, providing a seamless and intuitive user experience.
+        </p>
+        <p><strong>How AI Assist Works</strong></p>
+        <ul>
+            <li>
+                 When a user submits a prompt in the AI Assist panel, the request is sent to the AI service, where the prompt is processed to interpret the user's intent and determine the required operation (such as editing, formatting, reporting, or data analysis).
+            </li>
+            <li>
+                Based on the interpreted actions, the system sends the action-specific data along with the current spreadsheet context to the AI service to generate relevant, executable commands.
+            </li>
+            <li>
+                The AI service processes this information and returns structured commands, which are then executed directly in the spreadsheet (such as updating cells, applying styles, inserting charts, or reorganizing data).
+            </li>
+            <li>
+                Changes are immediately reflected in the Spreadsheet UI, and a confirmation is displayed in the AI Assist panel.
+            </li>
+        </ul>
+        <p><strong>Key Capabilities:</strong></p>              
+        <ul>
+            <li>
+                <strong>Data Analysis:</strong> Generate insights including summaries, KPIs, top records, and visual suggestions.
+            </li>
+            <li>
+                <strong>Data Operations:</strong> Edit cell values, apply AutoFill and manage content.
+            </li>
+            <li>
+                <strong>Rules & Validation:</strong> Apply conditional formatting and data validation rules.
+            </li>
+            <li>
+                <strong>Formatting:</strong> Apply styles such as bold, italic, font color, background color, number formats, and wrap text.
+            </li>
+            <li>
+                <strong>Structure Management:</strong> Insert/delete rows and columns, merge cells, and freeze panes.
+            </li>
+            <li>
+                <strong>Clipboard Actions:</strong> Perform cut, copy, and paste operations through AI commands.
+            </li>
+            <li>
+                <strong>Navigation:</strong> Perform sorting, filtering, and find & replace operations.
+            </li>
+            <li>
+                <strong>Visualization:</strong> Insert charts with multiple types, themes, titles, and sizing options.
+            </li>
+        </ul>
+            <p>AI Assist can be enabled by injecting the <strong>AIAssist</strong> module into the Spreadsheet using the <strong>Inject</strong> method 
+                and setting the <a target="_blank" href="https://ej2.syncfusion.com/angular/documentation/api/spreadsheet/index-default#enableaiassist">enableAIAssist</a> property to <strong>true</strong>.</p>
+            <p>Configure AI Assist behaviors using the <a target="_blank" href="https://ej2.syncfusion.com/angular/documentation/api/spreadsheet/index-default#aiassistsettings">aiAssistSettings</a> property:</p>
+        <ul>
+            <li><strong>requestUrl</strong> - Endpoint for your AI service.</li>
+            <li><strong>placeholder</strong> - Placeholder text for the input area.</li>
+            <li><strong>promptSuggestions</strong> - Predefined prompts to guide user interaction.</li>
+        </ul>
+        <p>
+            More information about the AI Assist feature can be found in this
+            <a target="_blank" href="https://help.syncfusion.com/document-processing/excel/spreadsheet/angular/ai-assist"> documentation</a> section.
+        </p>
+    </div>
+</div>

@@ -1,0 +1,689 @@
+<div id="action-description">
+    <p>This sample demonstrates how to add visible digital signatures with customizable appearance options, including a
+        signature image, signer details, and digital signature settings.</p>
+</div>
+<!-- Make the main container a flex row -->
+<div class="row">
+    <!-- Left: PDF Viewer (60%) -->
+    <div class="col-lg-8 control-section" style="height: 610px;">
+        <div class="e-pv-visible-sign-pdfviewer-tab-container">
+            <div class="e-pdf-toolbar e-pv-visible-sign-toolbar">
+                <ejs-toolbar id='topToolbar' #customToolbar>
+                    <e-items>
+                        <e-item id="visibleSign_download" (click)="downloadClicked($event)" prefixIcon='e-icons e-download'
+                            tooltipText='Download' [disabled]="!downloadVisibility"
+                            cssClass="e-pv-download-document-container" [align]="'Right'">
+                        </e-item>
+                    </e-items>
+                </ejs-toolbar>
+            </div>
+            <div class="e-pv-visible-sign-message">
+                <ejs-message id="msg_success" [content]="msgSuccess" [visible]='successVisible' severity="Success">
+                </ejs-message>
+                <ejs-message id="msg_warning" [content]="msgWarning" [visible]='warningVisible' severity="Warning">
+                </ejs-message>
+                <ejs-message id="msg_error" [content]="msgError" [visible]='errorVisible' severity="Error">
+                </ejs-message>
+            </div>
+            <div class="e-pv-visible-sign-pdfviewer-container">
+                <ejs-pdfviewer #pdfviewer id='pdfViewer' [documentPath]="document" (documentLoad)="documentLoad($event)"
+                    [enableToolbar]="false" [enableNavigationToolbar]="false" [resourceUrl]="resource"
+                    [enableAnnotationToolbar]="false" [enableTextSelection]="false" [zoomMode]="zoomMode"
+                    style="height:100%; width: 100%;">
+                </ejs-pdfviewer>
+            </div>
+        </div>
+    </div>
+    <!-- Right: Options Panel (40%) -->
+    <div class="col-lg-4 e-pv-visible-sign-tab-panel">
+        <div>
+            <div>
+                <div class="e-pv-visible-sign-header-title">
+                    <div class="e-pv-visible-sign-group-title">Signature Field</div>
+                </div>
+            </div>
+            <!-- Toggle Buttons for Create New / Existing Field -->
+            <div class="e-pv-visible-sign-tab-header">
+                <div class="e-pv-visible-sign-tab-header-item" [class.active]="isCreateNew"
+                    (click)="isCreateNew = true; isExistingField = false;" style="padding: 0 10px;">
+                    <span class="e-pv-visible-sign-tab-header-item-text">Create New</span>
+                </div>
+                <div class="e-pv-visible-sign-tab-header-item" [class.active]="isExistingField"
+                    (click)="isCreateNew = false; isExistingField = true;" style="padding: 0 10px;">
+                    <span class="e-pv-visible-sign-tab-header-item-text">Existing Field</span>
+                </div>
+            </div>
+        </div>
+        <div class="e-pv-visible-sign-tab">
+            <div class="e-pv-visible-sign-tab-content">
+                <div [hidden]="!isCreateNew">
+                    <!-- Position Group -->
+                    <div class="e-pv-visible-sign-group">
+                        <div class="e-pv-visible-sign-group-title">
+                            <span>Position</span>
+                        </div>
+                        <table class="e-pv-visible-sign-position-table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="e-pv-visible-sign-text-content">
+                                            <span>X</span>
+                                            <div class="e-pv-visible-sign-input-item">
+                                                <ejs-numerictextbox id="xValue" [showSpinButton]="false"
+                                                    placeholder="24" format="###.##" [min]="0" [value]="x"
+                                                    (change)="onPropertyChange('x', $event)">
+                                                </ejs-numerictextbox>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="e-pv-visible-sign-text-content">
+                                            <span>Y</span>
+                                            <div class="e-pv-visible-sign-input-item">
+                                                <ejs-numerictextbox id="yValue" [showSpinButton]="false"
+                                                    placeholder="12" format="###.##" [min]="0" [value]="y"
+                                                    (change)="onPropertyChange('y', $event)">
+                                                </ejs-numerictextbox>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                    <!-- Size Group -->
+                    <div class="e-pv-visible-sign-group" style="margin-top: 6px">
+                        <div class="e-pv-visible-sign-group-title">
+                            <span>Size</span>
+                        </div>
+                        <table class="e-pv-visible-sign-size-table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="e-pv-visible-sign-text-content">
+                                            <span>Width</span>
+                                            <div class="e-pv-visible-sign-input-item">
+                                                <ejs-numerictextbox id="widthBox" [showSpinButton]="true"
+                                                    placeholder="200" format="###.##" [min]="0" [value]="width"
+                                                    (change)="onPropertyChange('width', $event)">
+                                                </ejs-numerictextbox>
+                                            </div>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="e-pv-visible-sign-text-content">
+                                            <span>Height</span>
+                                            <div class="e-pv-visible-sign-input-item">
+                                                <ejs-numerictextbox id="heightBox" [showSpinButton]="true"
+                                                    placeholder="120" format="###.##" [min]="0" [value]="height"
+                                                    (change)="onPropertyChange('height', $event)">
+                                                </ejs-numerictextbox>
+                                            </div>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <!-- Existing Field Section -->
+                <div [hidden]="!isExistingField">
+                    <div class="e-pv-visible-sign-group">
+                        <table class="e-pv-visible-sign-inner-table">
+                            <tbody>
+                                <tr>
+                                    <td>
+                                        <div class="e-pv-visible-sign-text-content">
+                                            <span>Existing Field</span>
+                                        </div>
+                                    </td>
+                                    <td>
+                                        <div class="e-pv-visible-sign-text-content">
+                                            <ejs-dropdownlist #sample
+                                                [dataSource]="[{text: 'Signature Field 1', ID: 'Signature Field 1'}]"
+                                                [fields]="fields" [placeholder]="'Select existing field'"
+                                                [value]="existingField"
+                                                (change)="onPropertyChange('existingField', $event)"></ejs-dropdownlist>
+                                        </div>
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+                <hr />
+                <!-- Signature Image Group-->
+                <div>
+                    <div class="e-pv-visible-sign-signature-image-group">
+                        <div class="signature-image-header">
+                            <ejs-checkbox label="Signature Image" [checked]="signatureImage"
+                                (change)="onPropertyChange('signatureImage', $event)"></ejs-checkbox>
+                        </div>
+                        <div>
+                            <div id="e-pv-visible-sign-image-uploader" style="display: none;">
+                                <ejs-uploader #uploader id="signature-image-uploader"
+                                    [asyncSettings]="pdfviewerApiPath"
+                                    [allowedExtensions]="'.jpg,.jpeg,.png'" [dropArea]="dropElement"
+                                    (success)="onFileSuccess($event)" class="pdfViewer-ejs-uploader"
+                                    [showFileList]="false" (selected)="onFileSelect($event)"
+                                    [multiple]="false">
+                                </ejs-uploader>
+                            </div>
+                            <!-- Add Signature Button -->
+                            <button ejs-button cssClass="e-btn e-outline" [isPrimary]="true"
+                                style="float: right; text-transform: capitalize;"
+                                [style.display]="!signatureImage? 'none' : 'block'"
+                                (click)="browseOpen()">Add Signature</button>
+                        </div>
+                    </div>
+                    <div class="e-pv-visible-sign-uploaded-images" [class.hidden]="!signatureImage">
+                        @if (this.imageUrls.length > 0) {
+                        @for (imageUrl of imageUrls; track imageUrl; let index = $index;) {
+                        <div class="e-pv-visible-sign-image-wrapper"
+                            [class.selected]="selectedImageIndex === index" (click)="setSelectedImage(index)">
+                            @if (index > 0) {
+                            <button ejs-button class="e-pv-visible-sign-image-delete" cssClass="e-round"
+                                iconCss="e-icons e-close"
+                                (click)="handleDeleteImage($event, index)"></button>
+                            }
+                            <img id="signatureImage" [src]="imageUrl" alt="Signature {{index}}">
+                        </div>
+                        }
+                        }
+                    </div>
+                </div>
+                <hr />
+                <!-- Signature Description Group -->
+                <div class="e-pv-visible-sign-group">
+                    <div class="e-pv-visible-sign-group-title" style="margin-top: 6px">
+                        <span>Signature Description</span>
+                    </div>
+                    <table class="e-pv-visible-sign-inner-table">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <ejs-checkbox [checked]="showSigner" label="Show signer"
+                                        (change)="onPropertyChange('showSigner', $event)"></ejs-checkbox>
+                                </td>
+                                <td>
+                                    <ejs-textbox class="e-input" type="text" placeholder="Enter signer"
+                                        [value]="signer" [enabled]="showSigner"
+                                        (change)="onPropertyChange('signer', $event)"></ejs-textbox>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <ejs-checkbox [checked]="showReason" label="Show reason"
+                                        (change)="onPropertyChange('showReason', $event)"></ejs-checkbox>
+                                </td>
+                                <td>
+                                    <ejs-textbox class="e-input" type="text" placeholder="Enter reason"
+                                        [value]="reason" [enabled]="showReason"
+                                        (change)="onPropertyChange('reason', $event)"></ejs-textbox>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <ejs-checkbox [checked]="showLocation" label="Show location"
+                                        (change)="onPropertyChange('showLocation', $event)"></ejs-checkbox>
+                                </td>
+                                <td>
+                                    <ejs-textbox class="e-input" type="text" placeholder="Enter location"
+                                        [value]="location" [enabled]="showLocation"
+                                        (change)="onPropertyChange('location', $event)"></ejs-textbox>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <ejs-checkbox [checked]="showDate" label="Show date"
+                                        (change)="onPropertyChange('showDate', $event)"></ejs-checkbox>
+                                </td>
+                                <td>
+                                    <ejs-datepicker [value]="date" [format]="format"
+                                        [inputFormats]="inputFormats" [allowEdit]="false"
+                                        placeholder="Enter date" [showClearButton]="false" [enabled]="showDate" [max]="maxDate"
+                                        (change)="onPropertyChange('date', $event)"></ejs-datepicker>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <hr />
+                <!-- Display Mode, Signature Type, Digest Algorithm -->
+                <div class="e-pv-visible-sign-group">
+                    <table class="e-pv-visible-sign-inner-table">
+                        <tbody>
+                            <tr>
+                                <td>
+                                    <div class="e-pv-visible-sign-dropdown-label">
+                                        <span>Display mode</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <ejs-dropdownlist [dataSource]="displayModes" [fields]="fields"
+                                        placeholder="Select display mode" [value]="displayMode"
+                                        (change)="onPropertyChange('displayMode', $event)"
+                                        [enabled]="signatureImage">
+                                    </ejs-dropdownlist>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="e-pv-visible-sign-dropdown-label">
+                                        <span>Signature Type</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <ejs-dropdownlist [dataSource]="signatureTypes" [fields]="fields"
+                                        placeholder="Select signature type" [value]="signatureType"
+                                        (change)="onPropertyChange('signatureType', $event)">
+                                    </ejs-dropdownlist>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <div class="e-pv-visible-sign-dropdown-label">
+                                        <span>Digest Algorithm</span>
+                                    </div>
+                                </td>
+                                <td>
+                                    <ejs-dropdownlist [dataSource]="digestAlgorithms" [fields]="fields"
+                                        placeholder="Select Digest Algorithm" [value]="digestAlgorithm"
+                                        (change)="onPropertyChange('digestAlgorithm', $event)">
+                                    </ejs-dropdownlist>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>            
+        <div class="e-pv-visible-sign-tab-content-footer">
+            <!-- Sign Document Button -->
+            <button ejs-button [isPrimary]="true" cssClass="e-btn e-primary"
+                style="float: right; text-transform: capitalize; width: 160px" (click)="signDocument($event)"
+                [disabled]="!buttonVisibility">
+                Sign Document
+            </button>
+        </div>
+    </div>
+</div>
+
+<div id="description">
+    <p>
+        In this demo, users can either create a new signature or sign an existing form field. Once all required inputs
+        are provided, clicking the "Sign Document" button programmatically applies a certified visual digital signature
+        and refreshes the viewer to display the signed document.
+    </p>
+
+    <br />
+
+    <p>After signing, the following message is displayed to indicate a successful and valid signature:</p>
+
+    <br />
+
+    <p>
+        “The document has been digitally signed and all the signatures are valid.”<br />
+        This message confirms that the document has been signed without any issues and that all digital signatures are
+        valid.
+    </p>
+    
+    <br />
+
+    <p>
+        More information on the PDF Viewer instantiation can be found on this
+        <a target="_blank" href="https://help.syncfusion.com/document-processing/pdf/pdf-viewer/angular/getting-started">
+            documentation section</a>.
+        Looking for the full Angular PDF Viewer component overview, features, pricing, and documentation? Visit the
+        <a target="_blank" href="https://www.syncfusion.com/pdf-viewer-sdk/angular-pdf-viewer">
+        Angular PDF Viewer</a> Page.
+    </p>
+</div>
+
+<style>
+    .e-pv-visible-sign-pdfviewer-tab-container .e-pv-visible-sign-toolbar,
+    .e-pv-visible-sign-pdfviewer-tab-container .e-pv-visible-sign-message {
+        flex-shrink: 0;
+    }
+
+    .e-pv-visible-sign-tab-panel {
+        display: flex;
+        flex-direction: column;
+        border-left: 1px solid #D7D7D7;
+        padding: 0 !important;
+        height: 620px;
+        overflow-x: hidden;
+    }
+
+    .control-wrapper {
+        height: 100%;
+    }
+
+    .e-pv-visible-sign-tab {
+        flex: 1 1 auto;
+        overflow-y: auto;
+        overflow-x: hidden;
+        padding: 12px 12px 16px;
+    }
+
+    .e-view.e-bigger .e-pv-visible-sign-tab {
+        padding: 12px 16px 16px;
+    }
+
+    .e-pv-visible-sign-tab hr {
+        border-color: #D7D7D7;
+        margin-top: 16px;
+        margin-bottom: 16px;
+    }
+
+    .e-pv-visible-sign-tab-content {
+        flex-grow: 1;
+    }
+
+    .e-pv-visible-sign-header-title {
+        padding: 12px;
+    }
+
+    .e-pv-visible-sign-group-title,
+    .e-pv-visible-sign-dropdown-label {
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .e-view.e-bigger .e-pv-visible-sign-text-content,
+    .e-view.e-bigger .e-pv-visible-sign-tab-header-item-text,
+    .e-view.e-bigger .e-pv-visible-sign-group-title,
+    .e-view.e-bigger .e-pv-visible-sign-dropdown-label,
+    .e-view.e-bigger .e-checkbox-wrapper .e-label {
+        font-size: 16px;
+    }
+
+    .e-view.e-bigger .e-pv-visible-sign-group-title,
+    .e-view.e-bigger .e-pv-visible-sign-dropdown-label {
+        font-weight: 600;
+    }
+
+    .e-pv-visible-sign-inner-table,
+    .e-pv-visible-sign-position-table,
+    .e-pv-visible-sign-size-table,
+    .e-pv-visible-sign-description-table {
+        width: 100%;
+        border-collapse: collapse;
+        table-layout: fixed;
+    }
+
+    .e-pv-visible-sign-position-table,
+    .e-pv-visible-sign-size-table {
+        table-layout: auto;
+    }
+
+    .e-pv-visible-sign-inner-table td,
+    .e-pv-visible-sign-position-table td,
+    .e-pv-visible-sign-size-table td {
+        text-wrap: nowrap;
+        padding: 6px;
+    }
+
+    .e-pv-visible-sign-description-table td {
+        text-wrap: nowrap;
+        padding: 6px 0;
+    }
+
+    .e-pv-visible-sign-description-table td:first-child {
+        padding-right: 6px;
+        /* width: 10%; */
+    }
+
+    .e-pv-visible-sign-description-table td:last-child {
+        padding-right: 6px;
+        width: 60%;
+    }
+
+    .e-pv-visible-sign-inner-table td:first-child,
+    .e-pv-visible-sign-position-table td:first-child,
+    .e-pv-visible-sign-size-table td:first-child {
+        padding-left: 0;
+    }
+
+    .e-pv-visible-sign-inner-table td:last-child,
+    .e-pv-visible-sign-position-table td:last-child,
+    .e-pv-visible-sign-size-table td:last-child, {
+        padding-right: 0;
+    }
+
+    .e-pv-visible-sign-inner-table td:first-child {
+        width: 40%;
+    }
+
+    .e-pv-visible-sign-inner-table td:last-child {
+        width: 60%;
+    }
+
+    .e-pv-visible-sign-signature-image-group {
+        display: flex;
+        flex-wrap: wrap;
+        justify-content: space-between;
+        align-items: center;
+        min-height: 40px;
+    }
+
+    .e-pv-visible-sign-input-item {
+        margin-top: 4px;
+    }
+
+    .signature-image-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+
+    .e-pv-visible-sign-uploaded-images {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 10px;
+        margin-top: 15px;
+    }
+
+    .e-pv-visible-sign-image-wrapper.selected {
+        border-color: #0078d4;
+    }
+
+    .e-pv-visible-sign-image-wrapper .e-pv-visible-sign-image-delete {
+        position: absolute;
+        top: -10px;
+        right: -10px;
+    }
+
+    .tailwind3-dark .e-pv-visible-sign-image-delete,
+    .tailwind3-dark .e-pv-visible-sign-image-delete:hover {
+        color: #000;
+    }
+
+    .e-pv-visible-sign-image-wrapper {
+        position: relative;
+        border: 2px solid;
+        border-color: lightgray;
+        cursor: pointer;
+        height: 60px;
+        width: 60px;
+        background-color: white;
+    }
+
+    .e-pv-visible-sign-image-wrapper img {
+        width: 100%;
+        height: 100%;
+        object-fit: contain;
+    }
+
+    .e-pv-visible-sign-tab-content-footer {
+        display: flex;
+        justify-content: flex-end;
+        position: sticky;
+        padding-right: 12px;
+        padding-top: 12px;
+        margin-bottom: 12px;
+        bottom: -1px;
+        z-index: 1;
+        flex-shrink: 0;
+        background-color: rgba(var(--color-sf-background));
+        border-top: 1px solid #D7D7D7;
+    }
+
+    .e-pv-visible-sign-tab-header-item-text {
+        height: 48px;
+        display: inline-flex;
+        align-items: center;
+        font-weight: 500;
+    }
+
+    .e-pv-visible-sign-tab-header {
+        display: flex;
+        border-bottom: 1px solid #D7D7D7;
+        background: rgba(var(--color-sf-background));
+        position: sticky;
+        top: 0;
+        z-index: 1;
+    }
+
+    .material3 .e-pv-visible-sign-tab-header,
+    .material3-dark .e-pv-visible-sign-tab-header {
+        background: rgba(var(--color-sf-background));
+        border-bottom: 1px solid rgba(var(--color-sf-outline));
+    }
+
+    .e-pv-visible-sign-tab-header-item {
+        position: relative;
+        padding: 0 15px;
+        cursor: pointer;
+        border-bottom: 3px solid transparent;
+        color: var(--color-sf-content-text-color-alt3);
+    }
+
+    .material3 .e-pv-visible-sign-tab-header-item,
+    .material3-dark .e-pv-visible-sign-tab-header-item {
+        color: rgba(var(--color-sf-on-surface-variant));
+    }
+
+    .e-pv-visible-sign-tab-header-item:hover {
+        color: rgba(var(--color-sf-content-text-color-hover));
+    }
+
+    .material3 .e-pv-visible-sign-tab-header-item:hover {
+        color: rgba(var(--color-sf-black));
+    }
+
+    .material3-dark .e-pv-visible-sign-tab-header-item:hover {
+        color: rgba(var(--color-sf-white));
+    }
+
+    .fluent2-highcontrast .e-pv-visible-sign-tab-header-item:hover {
+        color: rgba(var(--color-sf-white));
+    }
+
+    .e-pv-visible-sign-tab-header-item.active {
+        font-weight: 600;
+        color: rgba(var(--color-sf-primary));
+        border-bottom: 3px solid rgba(var(--color-sf-primary));
+    }
+
+    .e-pv-visible-sign-tab-header-item.active::after {
+        content: '';
+        position: absolute;
+        bottom: -3px;
+        left: 0;
+        right: 0;
+        height: 3px;
+        background-color: var(--color-sf-primary);
+    }
+
+    .material3 .e-pv-visible-sign-tab-header-item.active::after, 
+    .material3-dark .e-pv-visible-sign-tab-header-item.active::after {
+        background-color: rgba(var(--color-sf-primary));
+    }
+
+    .material3 .e-pv-visible-sign-tab-header-item.active,
+    .material3-dark .e-pv-visible-sign-tab-header-item.active {
+        border-bottom: 3px solid rgba(var(--color-sf-primary));
+        color: rgba(var(--color-sf-primary));
+    }
+
+    .e-pv-visible-sign-tab-header-item.active:hover {
+        color: rgba(var(--color-sf-primary));
+    }
+
+    .material3 .e-pv-visible-sign-tab-header-item.active:hover,
+    .material3-dark .e-pv-visible-sign-tab-header-item.active:hover {
+        color: rgba(var(--color-sf-primary));
+    }
+
+    .e-checkbox-wrapper .e-label,
+    .e-pv-visible-sign-text-content {
+        font-size: 14px;
+    }
+
+    .e-pv-visible-sign-pdfviewer-container,
+    .e-pv-visible-sign-pdfviewer-tab-container {
+        flex-shrink: 1;
+        flex-grow: 1;
+    }
+
+    .control-section {
+        height: 100%;
+    }
+
+    .e-pv-visible-sign-tab-panel .e-tab .e-tab-header {
+        position: sticky;
+        z-index: 1;
+        top: 0;
+        background-color: rgba(var(--color-sf-background));
+        font-weight: 500;
+    }
+
+    .bootstrap5\.3 .e-pv-visible-sign-tab-header-item.active,
+    .bootstrap5 .e-pv-visible-sign-tab-header-item.active,
+    .bootstrap5-dark .e-pv-visible-sign-tab-header-item.active,
+    .bootstrap5\.3-dark .e-pv-visible-sign-tab-header-item.active {
+        color: var(--color-sf-primary);
+        border-bottom: 3px solid var(--color-sf-primary);
+    }
+
+    .bootstrap5\.3 .e-pv-visible-sign-tab-header,
+    .bootstrap5 .e-pv-visible-sign-tab-header,
+    .bootstrap5-dark .e-pv-visible-sign-tab-header,
+    .bootstrap5\.3 .e-pv-visible-sign-tab-content-footer,
+    .bootstrap5 .e-pv-visible-sign-tab-content-footer,
+    .bootstrap5-dark .e-pv-visible-sign-tab-content-footer {
+        background-color: var(--color-sf-content-bg-color);
+    }
+
+    .bootstrap5\.3-dark .e-pv-visible-sign-tab-header,
+    .bootstrap5\.3-dark .e-pv-visible-sign-tab-content-footer {
+        background-color: var(--color-sf-content-bg-color);
+    }
+
+    .fluent2 .e-pv-visible-sign-tab-header-item.active,
+    .fluent2-dark .e-pv-visible-sign-tab-header-item.active {
+        color: var(--color-sf-primary);
+        border-bottom: 3px solid var(--color-sf-primary);
+    }
+
+    .tailwind3 .e-pv-visible-sign-tab-header-item.active,
+    .tailwind3-dark .e-pv-visible-sign-tab-header-item.active,
+    .fluent2-highcontrast .e-pv-visible-sign-tab-header-item.active {
+        color: var(--color-sf-primary);
+        border-bottom: 3px solid var(--color-sf-primary);
+    }
+
+    .tailwind3 .e-pv-visible-sign-tab-header,
+    .tailwind3-dark .e-pv-visible-sign-tab-header,
+    .tailwind3 .e-pv-visible-sign-tab-content-footer,
+    .tailwind3-dark .e-pv-visible-sign-tab-content-footer {
+        background-color: var(--color-sf-content-bg-color);
+    }
+
+    .e-pv-visible-sign-pdfviewer-tab-container {
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+    }
+</style>

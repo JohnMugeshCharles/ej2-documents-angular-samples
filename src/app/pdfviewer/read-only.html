@@ -1,0 +1,21 @@
+<div id="action-description">
+    <p>The sample showcases the PDF viewer operating in a read-only mode, which restricts the ability to make changes to annotations and form fields.</p>
+</div>
+<div class="control-section">
+    <div class="content-wrapper">
+        <ejs-pdfviewer #pdfviewer id="pdfViewer" [documentPath]='document' [resourceUrl]='resource' (created)='Created($event)' (documentLoad)='documentLoaded($event)'  [toolbarSettings]="toolbarSettings" style="height:640px;display:block" 
+        [enableStickyNotesAnnotation]="false" [enableAnnotationToolbar]="false" [enableDownload]="false" [annotationSettings]="annotation" [enablePageOrganizer]="false">
+    </ejs-pdfviewer>
+    </div>
+</div>
+
+<div id="description">
+    <p>
+        More information on the PDF Viewer instantiation can be found in this
+        <a target="_blank" href="https://help.syncfusion.com/document-processing/pdf/pdf-viewer/angular/getting-started">
+        documentation section</a>.
+        Looking for the full Angular PDF Viewer component overview, features, pricing, and documentation? Visit the
+        <a target="_blank" href="https://www.syncfusion.com/pdf-viewer-sdk/angular-pdf-viewer">
+        Angular PDF Viewer</a> Page.
+    </p>
+</div>

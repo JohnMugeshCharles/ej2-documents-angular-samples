@@ -1,0 +1,21 @@
+<div id="action-description">
+    <p>The `PDF Viewer` includes support for redaction annotations, enabling users to permanently remove sensitive or confidential information from PDF files. This feature offers a straightforward and effective redaction process, allowing secure content management directly within the viewer interface.</p>
+</div>
+<div class="control-section">
+    <div class="content-wrapper">
+        <ejs-pdfviewer #pdfviewer id="pdfViewer" [documentPath]='document' [resourceUrl]='resource' (documentLoad)='documentLoad($event)'  [toolbarSettings]="toolbarSettings" style="height:640px;display:block"></ejs-pdfviewer>
+    </div>
+</div>
+
+<div id="description">
+    <p> This example illustrates how to `perform redaction` using the PDF Viewer. Users can select areas on one or `multiple pages` and customize redaction properties as needed. By clicking the 'Redact' button, the marked content is permanently removed, and the updated document is reloaded into the viewer. The redacted file can then be saved or reopened for further use.
+    </p>
+    <p>
+        More information on the PDF Viewer instantiation can be found in this
+        <a target="_blank" href="https://help.syncfusion.com/document-processing/pdf/pdf-viewer/angular/getting-started">
+        documentation section</a>.
+        Looking for the full Angular PDF Viewer component overview, features, pricing, and documentation? Visit the
+        <a target="_blank" href="https://www.syncfusion.com/pdf-viewer-sdk/angular-pdf-viewer">
+        Angular PDF Viewer</a> Page.
+    </p>
+</div>

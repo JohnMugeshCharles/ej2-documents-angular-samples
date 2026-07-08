@@ -1,0 +1,125 @@
+<style>
+    body {
+        font-family: system-ui, -apple-system, Segoe UI, Roboto, Helvetica, Arial, sans-serif;
+        background: var(--bg);
+        color: var(--text);
+        margin: 0;
+    }
+
+    .card {
+        margin-top: 20px;
+        max-width: 100%;
+    }
+
+    .description {
+        font-size: 14px;
+        margin-bottom: 12px;
+        color: #4a4a4a;
+    }
+
+    .form-group {
+        margin-bottom: 12px;
+    }
+
+    label {
+        display: block;
+        font-weight: 600;
+        margin-bottom: 6px;
+    }
+
+    .inline {
+        display: flex;
+        align-items: center;
+        gap: 8px;
+        margin-top: 6px;
+    }
+
+    .btn-row {
+        display: flex;
+        gap: 12px;
+        margin-top: 14px;
+        flex-wrap: wrap;
+    }
+
+    .e-btn {
+        padding: 8px 16px;
+        font-weight: 600;
+        border-radius: 4px;
+        border-width: 1px;
+    }
+
+    /* Ensure Syncfusion components match the native text input width */
+    .form-group>ejs-dropdownlist,
+    .form-group>ejs-datepicker,
+    .form-group>ejs-textbox {
+        display: block;
+        width: 100%;
+        background: transparent;
+    }
+
+    /* Target Syncfusion rendered input elements to enforce sizing */
+    .form-group input.e-input,
+    .form-group .e-dropdownlist,
+    .form-group .e-datepicker,
+    .form-group .e-control.e-dropdownlist {
+        width: 100% !important;
+        box-sizing: border-box;
+        background: transparent;
+        height: 40px;
+    }
+
+    .e-datepicker .e-date-wrapper {
+        height: 40px;
+        padding-top: 5px;
+    }
+</style>
+<div class="control-section">
+    <div>Please note that Adobe Reader or its equivalent is required to view the resultant document</div>
+    <div class="card">
+        <div class="form-group">
+            <label>Name</label>
+            <ejs-textbox type="text" [(ngModel)]="name"></ejs-textbox>
+        </div>
+        <div class="form-group">
+            <label>Gender</label>
+            <ejs-dropdownlist [dataSource]="['Male','Female','Other']" [(ngModel)]="gender"></ejs-dropdownlist>
+        </div>
+        <div class="form-group">
+            <label>Date of Birth</label>
+            <ejs-datepicker [format]="'yyyy-MM-dd'" [value]="dobRaw"
+                (change)="onDobChange($event)"></ejs-datepicker>
+        </div>
+        <div class="form-group">
+            <label>Email ID</label>
+            <ejs-textbox type="email" [(ngModel)]="email"></ejs-textbox>
+        </div>
+        <div class="form-group">
+            <label>Coming from</label>
+            <ejs-dropdownlist [dataSource]="['Alabama','Alaska','Arizona','Arkansas','California']"
+                [(ngModel)]="state"></ejs-dropdownlist>
+        </div>
+        <div class="form-group">
+            <div class="inline">
+                <ejs-checkbox [(ngModel)]="newsletter"></ejs-checkbox>
+                <label>Would you like to receive our Newsletter?</label>
+            </div>
+        </div>
+        <div class="btn-row">
+            <button class="e-btn" (click)="viewPdf()">View Template</button>
+            <button class="e-btn" (click)="fillPdf('fill')">Fill Form</button>
+            <button class="e-btn" (click)="fillPdf('flatten')">Fill And Flatten</button>
+        </div>
+    </div>
+</div>
+<div id="action-description">
+    <p>
+        This sample demonstrates how to fill and flatten the form fields to personalize your PDF document. It is also
+        possible to create, edit, and delete the form fields using the <a href="https://www.syncfusion.com/document-sdk/javascript-pdf-library" target="_blank" rel="noopener" style="text-decoration: none;">JavaScript PDF Library</a>.
+    </p>
+</div>
+
+<div id="description">
+    <p>More information about the forms can be found in this documentation <a
+            href="https://help.syncfusion.com/document-processing/pdf/pdf-library/javascript/formfields" style="text-decoration: none;">section</a>.
+    </p>
+</div>

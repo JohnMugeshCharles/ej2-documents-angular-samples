@@ -1,0 +1,20 @@
+<div id="action-description">
+    <p>This sample demonstrates the creation of the supported Form fields in the PDF Viewer such as Textbox, Password, Checkbox, Radio Button, Drop Down, List box, Signature, and Initial. We can also customize these fields and can include new fields through the user interaction by switching to the designer mode.</p>
+</div>
+<div class="control-section">
+    <div class="content-wrapper">
+        <ejs-pdfviewer #pdfviewer id="pdfViewer" [documentPath]='document' [resourceUrl]='resource' (documentLoad)='documentLoaded($event)'
+            (validateFormFields)='validateFormFields($event)' [enableFormFieldsValidation]=true
+            [showNotificationDialog]=false style="height:640px;display:block"></ejs-pdfviewer>
+    </div>
+</div>
+<div id="description">   
+    <p>
+        More information on form designer support can be found in this
+        <a target="_blank" href="https://help.syncfusion.com/document-processing/pdf/pdf-viewer/angular/getting-started">
+        documentation section</a>.
+        Looking for the full Angular PDF Viewer component overview, features, pricing, and documentation? Visit the
+        <a target="_blank" href="https://www.syncfusion.com/pdf-viewer-sdk/angular-pdf-viewer">
+        Angular PDF Viewer</a> Page.
+    </p>
+</div>

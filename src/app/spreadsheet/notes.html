@@ -1,0 +1,145 @@
+<!-- custom code start -->
+<div id="action-description">
+    <p>
+        This sample demonstrates the <b>Notes</b> feature using the shopping cart scenario as an example.
+    </p>
+</div>
+<!-- custom code end -->
+<div class="control-section">
+    <ejs-spreadsheet #default [openUrl]="openUrl" [saveUrl]="saveUrl" (created)="created()">
+        <e-sheets>
+            <e-sheet name="Cart">
+                <e-ranges>
+                    <e-range [dataSource]="data" startCell="B3"></e-range>
+                </e-ranges>
+                <e-rows>
+                    <e-row [index]="0">
+                        <e-cells>
+                            <e-cell value="Shopping Cart" rowSpan="2" colSpan="6"
+                                [style]="{fontSize: '20pt', fontWeight: 'bold',textAlign: 'center', backgroundColor: '#279377', verticalAlign: 'middle', color: '#ffffff'}"></e-cell>
+                        </e-cells>
+                    </e-row>
+                    <e-row index="2">
+                        <e-cells>
+                            <e-cell value="Product ID" [style]="{fontWeight: 'bold', textAlign: 'center'}"></e-cell>
+                            <e-cell value="Product ID" [style]="{fontWeight: 'bold', textAlign: 'center'}"></e-cell>
+                            <e-cell value="Product ID" [style]="{fontWeight: 'bold', textAlign: 'center'}"></e-cell>
+                            <e-cell value="Product ID" [style]="{fontWeight: 'bold', textAlign: 'center'}"></e-cell>
+                            <e-cell value="Product ID" [style]="{fontWeight: 'bold', textAlign: 'center'}"></e-cell>
+                            <e-cell value="Product ID" [style]="{fontWeight: 'bold', textAlign: 'center'}"
+                                [notes]="{ text: 'This column represents the total revenue of all products.', isVisible: true }"></e-cell>
+                        </e-cells>
+                    </e-row>
+                    <e-row>
+                        <e-cells>
+                            <e-cell value="101" [style]="{textAlign: 'left'}"></e-cell>
+                            <e-cell index="1" [notes]="{ text: 'This product has been the most profitable this month.' }"></e-cell>
+                        </e-cells>
+                    </e-row>
+                    <e-row>
+                        <e-cells>
+                            <e-cell value="102" [style]="{textAlign: 'left'}"></e-cell>
+                            <e-cell index="1"
+                                [notes]="{ text: 'This product has had the lowest sales in terms of quantity this month.' }"></e-cell>
+                        </e-cells>
+                    </e-row>
+                    <e-row>
+                        <e-cells>
+                            <e-cell value="103" [style]="{textAlign: 'left'}"></e-cell>
+                            <e-cell index="1"
+                                [notes]="{ text: 'This product has been the least profitable this month.' }"></e-cell>
+                        </e-cells>
+                    </e-row>
+                    <e-row>
+                        <e-cells>
+                            <e-cell value="104" [style]="{textAlign: 'left'}"></e-cell>
+                        </e-cells>
+                    </e-row>
+                    <e-row>
+                        <e-cells>
+                            <e-cell value="105" [style]="{textAlign: 'left'}"></e-cell>
+                            <e-cell index="1"
+                                [notes]="{ text: 'This product has had the highest sales in terms of quantity this month.' }"></e-cell>
+                        </e-cells>
+                    </e-row>
+                    <e-row>
+                        <e-cells>
+                            <e-cell value="106" [style]="{textAlign: 'left'}"></e-cell>
+                        </e-cells>
+                    </e-row>
+                    <e-row>
+                        <e-cells>
+                            <e-cell value="107" [style]="{textAlign: 'left'}"></e-cell>
+                        </e-cells>
+                    </e-row>
+                    <e-row>
+                        <e-cells>
+                            <e-cell value="108" [style]="{textAlign: 'left'}"></e-cell>
+                        </e-cells>
+                    </e-row>
+                    <e-row>
+                        <e-cells>
+                            <e-cell value="109" [style]="{textAlign: 'left'}"></e-cell>
+                        </e-cells>
+                    </e-row>
+                    <e-row>
+                        <e-cells>
+                            <e-cell index="4" value="Total Amount"
+                                [style]="{border: '1px solid #A6A6A6', fontWeight: 'bold', textAlign: 'center', verticalAlign: 'middle'}"></e-cell>
+                            <e-cell index="5" formula="=Sum(F4:F12)"
+                                [style]="{border: '1px solid #A6A6A6', textAlign: 'right', verticalAlign: 'middle', fontWeight: 'bold'}"></e-cell>
+                        </e-cells>
+                    </e-row>
+                </e-rows>
+                <e-columns>
+                    <e-column [width]=88></e-column>
+                    <e-column [width]=120></e-column>
+                    <e-column [width]=100></e-column>
+                    <e-column [width]=100></e-column>
+                    <e-column [width]=100></e-column>
+                    <e-column [width]=110></e-column>
+                </e-columns>
+            </e-sheet>
+        </e-sheets>
+    </ejs-spreadsheet>
+</div>
+<!-- custom code start -->
+<div id="description">
+    <p>
+        The <b>Notes</b> feature lets you add annotations to cells while reviewing a worksheet. When a cell contains a
+        note, a red indicator appears in the corner. Hover over the indicator to view the note. You can enable or disable notes
+        using the <a target="_blank"
+            href="https://ej2.syncfusion.com/angular/documentation/api/spreadsheet/index-default#enablenotes"><code>enableNotes</code>
+            </a>
+        property; by default, it's enabled.
+    </p>
+    <p>
+        Notes can be added directly to cells using the context menu, the ribbon, or programmatically using the <a target="_blank"
+            href="https://ej2.syncfusion.com/angular/documentation/api/spreadsheet/index-default#updatecell"><code>updateCell</code>
+            </a>
+        method. You can perform the following actions:
+    </p>
+    <ul>
+        <li><b>Add Note</b> - Create a new note for a cell to provide feedback or context.</li>
+        <li><b>Edit Note</b> - Update the text of an existing note to keep information accurate.</li>
+        <li><b>Delete Note</b> - Remove a note when it's no longer needed.</li>
+        <li><b>Show/Hide Note</b> - Toggle the visibility of the note on the selected cell.</li>
+        <li><b>Previous Note</b> - Navigate to the previous note in the workbook.</li>
+        <li><b>Next Note</b> - Navigate to the next note in the workbook.</li>
+        <li><b>Show All Notes</b> - Display all notes in the worksheet for a comprehensive view.</li>
+    </ul>
+    <p>The following keyboard shortcuts apply to the <b>Notes</b> feature:</p>
+    <ul>
+        <li><kbd>Shift</kbd> + <kbd>F2</kbd> - Add a note to the current cell.</li>
+        <li><kbd>Esc</kbd> - Save and close the note only if the <code>isVisible</code> property is set to <code>false</code>.</li>
+    </ul>
+    <p>
+        More information about the Notes feature can be found in this <a target="_blank"
+            href="https://help.syncfusion.com/document-processing/excel/spreadsheet/angular/notes">
+            documentation</a>
+        section.
+    </p>
+</div>
+<style>
+</style>
+<!-- custom code end -->

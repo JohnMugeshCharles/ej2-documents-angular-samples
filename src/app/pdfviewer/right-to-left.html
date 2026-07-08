@@ -1,0 +1,26 @@
+<div id="action-description">
+    <p>RTL provides an option to switch the text direction and layout of the PDF Viewer from right to left. It improves the user experiences and accessibility for users who use right-to-left languages (Arabic, Farsi, Urdu, etc.). To enable RTL PDF Viewer,
+        set the enableRtl to true.</p>
+</div>
+<div class="control-section">
+    <div class="content-wrapper">
+        <ejs-pdfviewer #pdfviewer id="pdfViewer" [documentPath]='document' [resourceUrl]='resource' [enableRtl]=true [locale]='culture' [annotationSettings]='annotationSettings' style="height:640px;display:block"></ejs-pdfviewer>
+    </div>
+</div>
+
+<div id="description">
+    <p>
+        In this example, you can see PDF Viewer right-to-left and the locale set in arabic[locale value is ar-AE]
+    </p>
+    <p>
+        By default, locale value is en-US. If you want to change the en-US culture to a different culture, you have to change the locale accordingly.
+    </p>
+    <p>
+        More information on the PDF Viewer features can be found in this
+        <a target="_blank" href="https://help.syncfusion.com/document-processing/pdf/pdf-viewer/angular/getting-started">
+        documentation section</a>.
+        Looking for the full Angular PDF Viewer component overview, features, pricing, and documentation? Visit the
+        <a target="_blank" href="https://www.syncfusion.com/pdf-viewer-sdk/angular-pdf-viewer">
+        Angular PDF Viewer</a> Page.
+    </p>
+</div>
