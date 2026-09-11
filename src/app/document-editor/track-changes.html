@@ -10,8 +10,8 @@
     <div>
         <div id="default_title_bar" class="e-de-ctn-title"></div>
         <div>
-            <ejs-documenteditorcontainer #documenteditor_default [enableToolbar]=true [enableTrackChanges]=true [locale]="culture" [toolbarMode]="'Ribbon'" (created)="onCreate()" [showPropertiesPane]=false
-                (documentChange)="onDocumentChange()" height="600px" [serviceUrl]="hostUrl"  style="display:block;" userColor="#b70f34" currentUser = "Nancy Davolio"></ejs-documenteditorcontainer>
+            <ejs-documenteditorcontainer #documenteditor_default [enableToolbar]=true id="container" [enableTrackChanges]=true [locale]="culture" [toolbarMode]="'Ribbon'" (created)="onCreate()" [showPropertiesPane]=false
+                (documentChange)="onDocumentChange()" height="600px" [serviceUrl]="hostUrl"  style="display:block;" userColor="#b70f34" currentUser = "Nancy Davolio" [fileMenuItems]="fileMenuItems" (fileMenuItemClick)="fileMenuItemClick($event)"></ejs-documenteditorcontainer>
         </div>
     </div>
 </div>

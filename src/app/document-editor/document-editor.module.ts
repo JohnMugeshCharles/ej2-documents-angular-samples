@@ -42,10 +42,11 @@ import { DocumentListComponent } from './document-list.component';
 import { RuleComponent } from './ruler.component';
 import { BindUIDocumentComponent } from './bindUI-to-document.component';
 import { AutoShapesComponent } from './autoshapes.component';
-import {RibbonCustomizationComponent} from './ribbon-customization.component';
+import { RibbonCustomizationComponent} from './ribbon-customization.component';
 import { SmartEditorComponent } from './ai-smart-editors.component';
 import { SpellCheckComponent } from './spell-check.component';
-
+import { CompareDocumentsComponent } from './compare-documents.component';
+import { ContentNavigationComponent } from './content-navigation.component';
 export const documentEditorAppRoutes: Object[] = [
     // tslint:disable:max-line-length
     { path: ':theme/document-editor/default', component: DocEditorComponent, name: 'Default functionalities', order: '01', category: 'DocumentEditor', description: "The Document Editor component is used to create, edit, view, and print Word documents in web applications." },
@@ -53,9 +54,10 @@ export const documentEditorAppRoutes: Object[] = [
     { path: ':theme/document-editor/ai-smart-editors', component: SmartEditorComponent, name: 'Smart Editor', order: '02', category: 'Smart AI Solutions', description: 'This demo shows the smart AI feature in document editor component.' },
     { path: ':theme/document-editor/document-list', component: DocumentListComponent, name: 'Document List', order: '03', category: 'File Management', description: "The Document Editor component in JavaScript platform is used to opening a Word document in both read-only and editable modes using the Document Editor. It is presented in a modal dialog, initiated from a list of documents within the grid view." },
     { path: ':theme/document-editor/mail-merge', component: MailMergeComponent, name: 'Mail Merge', order: '04', category: 'Mail Merge', description: "The Document Editor component provides support to mail merge document with the help of Syncfusion DocIO." },
-    { path: ':theme/document-editor/comments', component: CommentsComponent, name: 'Comments', order: '05', category: 'Review', description: "The Document Editor component supports add and edit comments in a Word document for comment discussion." },
+    { path: ':theme/document-editor/comments', component: CommentsComponent, name: 'Comments', type: 'update', order: '05', category: 'Review', description: "The Document Editor component supports add and edit comments in a Word document for comment discussion." },
     { path: ':theme/document-editor/track-changes', component: TrackChangesComponent, name: 'Track Changes', order: '05', category: 'Review', description: "The Document Editor component in JavaScript platform allows users to view, make changes and accept or reject them in a Word document." },
-    { path: ':theme/document-editor/spell-check', component: SpellCheckComponent, name: 'Spell Checking', type: 'new', order: '05', category: 'Review', description: "This example demonstrates the built-in spell checker functionality in the Document Editor component with real-time error detection and suggestions." },
+    { path: ':theme/document-editor/compare-documents', component: CompareDocumentsComponent, name: 'Compare Documents', type:'new', order: '05', category: 'Review', description: "This example demonstrates Word document comparison in the Document Editor. Upload two documents and click Compare button to view differences as tracked changes." },
+    { path: ':theme/document-editor/spell-check', component: SpellCheckComponent, name: 'Spell Checking', order: '05', category: 'Review', description: "This example demonstrates the built-in spell checker functionality in the Document Editor component with real-time error detection and suggestions." },
     { path: ':theme/document-editor/document-protection', component: DocumentEditorProtectionComponent, name: 'Document Protection', order: '06', category: 'Security', description: "The Document Editor provides document protection supports to restrict the types of changes can be made to the document by a user/user group." },
     { path: ':theme/document-editor/ribbon-customization', component: RibbonCustomizationComponent, name: 'Ribbon Customization', order: '07', category: 'Customization', description: "The Document editor allows to customize the built-in ribbon for better editing experience." },
     { path: ':theme/document-editor/custom-context-menu', component: CustomContextMenuComponent, name: 'Custom Context Menu', order: '07', category: 'Customization', description: "The Document Editor supports custom options for users who use to add custom options in context menu." },
@@ -82,6 +84,7 @@ export const documentEditorAppRoutes: Object[] = [
     { path: ':theme/document-editor/form-fields', component: FormFieldsComponent, name: 'Form Fields', order: '13', category: 'Editing Features', description: "The Document Editor component in JavaScript platform allows users to design and fill legacy form fields (text, check box, and drop down) in a Word document." },
     { path: ':theme/document-editor/multiple-columns', component: MultipleColumnsComponent, name: 'Multiple Columns', order: '13', category: 'References', description: "The Document Editor supports add or remove columns." },
     { path: ':theme/document-editor/chart', component: DocumentEditorChartComponent, name: 'Chart Preservation', order: '14', category: 'Charts', description: "The Document Editor supports chart preservation for users who use to view their business reports with intuitive graphical data visualization." },
+    { path: ':theme/document-editor/content-navigation', component: ContentNavigationComponent, name: 'Content Navigation', type: 'new', order: '12', category: 'View', description: "The Document Editor supports finding and highlighting content, creating bookmarks, and navigating between findings." },
 ];
 
 export const DocumentEditorSampleModule: ModuleWithProviders<any> = RouterModule.forChild(documentEditorAppRoutes);

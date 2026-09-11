@@ -10,8 +10,8 @@
     <div>
         <div id="default_title_bar" class="e-de-ctn-title"></div>
         <div>
-            <ejs-documenteditorcontainer #documenteditor_default [enableToolbar]=true [locale]="culture" [toolbarMode]="'Ribbon'" (created)="onCreate()"
-                (documentChange)="onDocumentChange()"  [serviceUrl]="hostUrl" height="600px" style="display:block;"></ejs-documenteditorcontainer>
+            <ejs-documenteditorcontainer #documenteditor_default id="container" [enableToolbar]=true [locale]="culture" [toolbarMode]="'Ribbon'" (created)="onCreate()"
+                (documentChange)="onDocumentChange()"  [serviceUrl]="hostUrl" height="600px" style="display:block;" [fileMenuItems]="fileMenuItems" (fileMenuItemClick)="fileMenuItemClick($event)"></ejs-documenteditorcontainer>
         </div>
     </div>
 </div>

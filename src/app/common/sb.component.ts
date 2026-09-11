@@ -1,4 +1,4 @@
-import { Component, ElementRef, HostListener, Inject, Input, ViewChild } from '@angular/core';
+import { Component, ElementRef, HostListener, Inject, Input, ViewChild, NgZone } from '@angular/core';
 import { Router, NavigationStart, NavigationEnd, ActivatedRoute, RouterOutlet } from '@angular/router';
 import {
     select, selectAll, isVisible, createElement, Ajax, getComponent,
@@ -10,12 +10,12 @@ import { HttpClient } from '@angular/common/http';
 import { Browser, addClass, enableRipple, detach, Animation, AnimationOptions } from '@syncfusion/ej2-base';
 import { Popup, Tooltip } from '@syncfusion/ej2-popups';
 import { Tab, Accordion } from '@syncfusion/ej2-navigations';
+import { Message } from '@syncfusion/ej2-notifications';
 import { Locale } from './locale-string';
 import { samplesList } from './samplelist';
 import { LPController, MyWindow } from './lp.component';
 import { ListViewComponent, SelectEventArgs } from '@syncfusion/ej2-angular-lists';
-import { Observable, forkJoin } from 'rxjs';
-import { filter, map, mergeMap } from 'rxjs/operators';
+import { filter, map, mergeMap, take } from 'rxjs/operators';
 import numberSystem from './cldr-data/supplemental/numberingSystems.json';
 import currencyData from './cldr-data/supplemental/currencyData.json';
 import de from './cldr-data/main/de/all.json';
@@ -23,6 +23,7 @@ import ar from './cldr-data/main/ar/all.json';
 import frch from './cldr-data/main/fr-CH/all.json';
 import en from './cldr-data/main/en/all.json';
 import zh from './cldr-data/main/zh/all.json';
+import { runAxeReport } from './accessibility/axe-integration';
 
 loadCldr(
     numberSystem,
@@ -108,6 +109,8 @@ export class SBController {
     public mobileOverlay: Element;
     public searchBox: AutoComplete;
     public loader: Element;
+    public axeMessage: Message;
+    public axeCheckButton: Button;
     public resizeManualTrigger: boolean = false;
     public currentViewMode: string = '';
     public previousViewMode: string = '';
@@ -117,6 +120,7 @@ export class SBController {
     public prevControlName: string = '';
     public copyRight: number = new Date().getFullYear();
     private isContentLoaded: boolean = false;
+    private isRtl: boolean = false;
 
     //Bread Crumb Object
     public breadCrumbObject:
@@ -135,7 +139,9 @@ export class SBController {
         private ngEle: ElementRef,
         @Inject('sourceFiles') private sourceFiles: any,
         private router: Router,
-        private activatedRoute: ActivatedRoute, private http: HttpClient) {
+        private activatedRoute: ActivatedRoute, 
+        private http: HttpClient,
+        private ngZone: NgZone) {
         for (let routes of this.router.config) {
             if ((!Browser.isDevice || !(<any>routes).hideOnDevice) && routes.path.indexOf('/') !== -1) {
                 this.pathRoutes.push(routes.path);
@@ -212,13 +218,9 @@ export class SBController {
             change: (e: any) => {
                 let value: string = e.value;
                 this.currencyDropDown.value = matchedCurrency[value];
-
+                this.isRtl = value === 'ar';
                 setCulture(e.value);
-                if (value == "ar") {
-                    this.changeRtl(true);
-                } else {
-                    this.changeRtl(false);
-                }
+                this.applyRtlAfterRender();
                 if (this.isMobile) {
                     this.removeOverlay();
                 }
@@ -418,7 +420,7 @@ export class SBController {
             }
         }
         this.router.events.pipe(
-            filter((event: NavigationStart) => event instanceof NavigationStart)
+            filter((event): event is NavigationStart => event instanceof NavigationStart)
         )
         .subscribe((event: any) => {
             this.hideShowSBLoader();
@@ -454,7 +456,7 @@ export class SBController {
         });
 
         this.router.events
-            .pipe(filter((event: NavigationEnd) => event instanceof NavigationEnd))
+            .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
             .pipe(map(() => this.activatedRoute))
             .pipe(map((route: any) => {
                 while (route.firstChild) { route = route.firstChild; };
@@ -491,7 +493,7 @@ export class SBController {
             });
 
         this.router.events
-            .pipe(filter((event: NavigationEnd) => event instanceof NavigationEnd))
+            .pipe(filter((event): event is NavigationEnd => event instanceof NavigationEnd))
             .subscribe((event: any) => {
                 let hash: string[] = location.hash.split('/');
                 if (!document.querySelector('.active-theme')) {
@@ -512,6 +514,7 @@ export class SBController {
                 history.replaceState({}, 'theme', href + hash.join('/'));
                 this.setThemeItemActive(location.hash.split('/')[1]);
                 this.setSbLink();
+                //this.applyRtlAfterRender();
                 // this.hideShowSBLoader(true);
                 this.isInitialRender = false;
                 this.prevSampleName = this.sampleName;
@@ -632,11 +635,19 @@ export class SBController {
         this.searchBox.dataSource = this.leftControl.listData;
         this.searchBox.dataBind();
         this.searchBox.appendTo('#search-input');
+        this.axeMessage = new Message({
+            severity: 'Info',
+            cssClass: 'sf-axe-msg'
+        });
+        this.axeMessage.appendTo('#sf-axe-message');
+        this.axeCheckButton = new Button({ cssClass: 'e-link' });
+        this.axeCheckButton.appendTo('#sf-axe-btn');
         this.renderTab();
         this.renderSBPopup();
         this.renderTabToolBar();
         this.wireEvents();
         this.setResponsive();
+        this.updateAxeSectionVisibility();
         // Validate if current sample should be hidden on mobile (for page refresh scenario)
         const isDeviceMode = (window as any).browserDetails?.isDevice;
         if (isDeviceMode) {
@@ -668,8 +679,9 @@ export class SBController {
 
     ngAfterContentChecked(): void {
         // Don't perform any more operations in this method.
-        if (this.cultureDropDown.value == "ar") {
-            this.changeRtl(true);
+		 if (this.cultureDropDown.value == "ar") {
+            this.isRtl = true;
+            this.applyRtlAfterRender();
         }
         if (this.isContentLoaded) { this.hideShowSBLoader(true); }
     }
@@ -685,13 +697,28 @@ export class SBController {
         }
     }
 
-    changeRtl(hide?: boolean): void {
-        let elementlist: any = selectAll('.e-control', document.getElementById('control-content'));
-        for (let control of elementlist) {
-            let eleinstance: Object[] = (<DestroyMethod>control).ej2_instances;
-            if (eleinstance) {
-                for (let instance of eleinstance) {
-                    (<DestroyMethod>instance).enableRtl = hide;
+     private applyRtlAfterRender(): void {
+        this.ngZone.onStable.pipe(take(1)).subscribe(() => {
+            setTimeout(() => {
+                this.changeRtl(this.isRtl);
+            }, 0);
+        });
+    }
+
+    changeRtl(enable: boolean): void {
+        const container = document.getElementById('control-content');
+        if (!container) {
+            return;
+        }
+        const elementList: Element[] = selectAll('.e-control', container) as Element[];
+        for (const control of elementList) {
+            const instances = (control as any).ej2_instances;
+            if (!instances) continue;
+            for (const instance of instances) {
+                if (!instance) continue;
+                instance.enableRtl = enable;
+                if (typeof instance.dataBind === 'function') {
+                    instance.dataBind();
                 }
             }
         }
@@ -846,6 +873,22 @@ export class SBController {
         this.previousViewMode = this.previousViewMode === '' ? this.currentViewMode : this.previousViewMode;
         this.viewModeChanged = this.currentViewMode !== this.previousViewMode;
         this.previousViewMode = this.currentViewMode;
+        this.updateAxeSectionVisibility();
+    }
+
+     private updateAxeSectionVisibility(): void {
+        const axeSection: HTMLElement = document.querySelector('.sf-axe-section') as HTMLElement;
+        if (!axeSection) {
+            return;
+        }
+        const pathArray: string[] = location.hash.split('/').slice(2);
+        const isAISample: boolean = /\b(?:ai-(?!assistview\b)[a-z-]+|[a-z-]*smart[a-z-]*|[a-z-]*summariz[a-z-]*)\b/i.test(pathArray[1]);
+         const isPdf: boolean = location.hash.indexOf('/pdf/') !== -1;
+        if (isAISample || this.isMobile || isPdf) {
+            axeSection.classList.add('sb-hide');
+        } else {
+            axeSection.classList.remove('sb-hide');
+        }
     }
 
     onSBResize(event: any) {
@@ -896,6 +939,7 @@ export class SBController {
         select('.sb-settings').addEventListener('click', this.onSearchButtonClick.bind(this));
         select('.e-search-overlay').addEventListener('click', this.onSearchOverlayClick.bind(this));
         select('.close-button').addEventListener('click', this.onCloseButtonClick.bind(this));
+        select('#sf-axe-btn').addEventListener('click', this.accessClick.bind(this));
         this.mobileOverlay.addEventListener('click', this.onMobileOverlayClick.bind(this));
         this.themeDarkButton.addEventListener('click', this.darkSwitch.bind(this));
         window.addEventListener('resize', this.onSBResize.bind(this));
@@ -943,6 +987,10 @@ export class SBController {
             select('li.e-list-item.e-level-1.e-active').scrollIntoView({block:"nearest"});
             },100);
 
+    }
+
+    accessClick(): void {
+        runAxeReport();
     }
 
     onNavButtonClick(e: any) {

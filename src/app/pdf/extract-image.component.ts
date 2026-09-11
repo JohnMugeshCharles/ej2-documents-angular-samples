@@ -58,7 +58,7 @@ export class ExtractImagePdfComponent implements OnInit {
                     const firstImage = images[0];
 
                     // Convert extracted image bytes to a Blob so the browser can download it
-                    const blob = new Blob([firstImage.data], { type: 'image/jpeg' });
+                    const blob = new Blob([firstImage.data.buffer as ArrayBuffer], { type: 'image/jpeg' });
 
                     // Trigger a file download in the browser
                     this.downloadBlob(blob, this.outputImageName);
@@ -85,7 +85,7 @@ export class ExtractImagePdfComponent implements OnInit {
         viewBtn.element.onclick = async (): Promise<void> => {
             try {
                 const pdfBytes = await this.readFromPdfResources(this.templateUrl);
-                const blob = new Blob([pdfBytes], { type: 'application/pdf' });
+                const blob = new Blob([pdfBytes.buffer as ArrayBuffer], { type: 'application/pdf' });
                 this.downloadBlob(blob, 'ImageTemplate.pdf');
             } catch (error) {
                 console.error('View Template failed:', error);

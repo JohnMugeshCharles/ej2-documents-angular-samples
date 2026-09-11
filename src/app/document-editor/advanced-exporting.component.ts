@@ -1,9 +1,9 @@
 import { ListView, ListViewAllModule, ListViewComponent,SelectEventArgs } from '@syncfusion/ej2-angular-lists';
 import { SliderModule, NumericTextBoxModule, ColorPickerModule } from '@syncfusion/ej2-angular-inputs';
-import { CheckBoxModule, ButtonModule } from '@syncfusion/ej2-angular-buttons';
+import { CheckBoxModule, ButtonModule, SwitchModule, SwitchComponent } from '@syncfusion/ej2-angular-buttons';
 import { DropDownButton, DropDownButtonComponent, DropDownButtonModule, SplitButtonModule } from '@syncfusion/ej2-angular-splitbuttons';
 import { Component, ViewEncapsulation, ViewChild } from '@angular/core';
-import { ToolbarService, DocumentEditorContainerComponent, DocumentEditorContainerModule } from '@syncfusion/ej2-angular-documenteditor';
+import { ToolbarService, RibbonService, DocumentEditorContainerComponent, DocumentEditorContainerModule } from '@syncfusion/ej2-angular-documenteditor';
 import { TitleBar } from './title-bar';
 import { defaultDocument, WEB_API_ACTION } from './data';
 import { isNullOrUndefined } from '@syncfusion/ej2-base';
@@ -17,29 +17,95 @@ import { createSpinner, showSpinner, hideSpinner } from '@syncfusion/ej2-angular
     selector: 'control-content',
     templateUrl: 'advanced-exporting.html',
     encapsulation: ViewEncapsulation.None,
-    providers: [ToolbarService],
+    providers: [ToolbarService, RibbonService],
     standalone: true,
-    imports: [DocumentEditorContainerModule, SBActionDescriptionComponent, SBDescriptionComponent]
+    imports: [DocumentEditorContainerModule,  SwitchModule, SBActionDescriptionComponent, SBDescriptionComponent]
 })
 export class ExportComponent {
     public hostUrl: string = 'https://document.syncfusion.com/web-services/docx-editor/api/documenteditor/';
     @ViewChild('documenteditor_default')
     public container: DocumentEditorContainerComponent;
-    
+    @ViewChild('switch')
+    public switch: SwitchComponent;
     public culture: string = 'en-US';
     titleBar: TitleBar;
+
+    public fileMenuItems: any = [
+        'New',
+        'Open',
+        {
+            text: 'Export',
+            id: 'custom_item',
+            iconCss: 'e-icons e-export',
+            items: [
+                { id: 'sfdt', text: 'Syncfusion Document Text (*.sfdt)' },
+                { id: 'docx', text: 'Word Document (*.docx)' },
+                { id: 'dotx', text: 'Word Template (*.dotx)' },
+                { id: 'text', text: 'Plain Text (*.txt)' },
+                { id: 'pdf', text: 'PDF (*.pdf)' },
+                { id: 'html', text: 'HyperText Markup Language (*.html)' },
+                { id: 'rtf', text: 'Rich Text Format (*.rtf)' },
+                { id: 'md', text: 'Markdown (*.md)' },
+                { id: 'odt', text: 'OpenDocument Text (*.odt)' },
+                { id: 'wordml', text: 'Word XML Document (*.xml)' }
+            ],
+        },
+        'Print',
+    ];
+
+    public fileMenuItemClick(args: any): void {
+        if (args.item.id) {
+            let value: string = args.item.id;
+            switch (value) {
+                case 'docx':
+                this.container.documentEditor.save('Sample', 'Docx');
+                break;
+                case 'sfdt':
+                this.container.documentEditor.save('Sample', 'Sfdt');
+                break;
+                case 'text':
+                this.container.documentEditor.save('Sample', 'Txt');
+                break;
+                case 'dotx':
+                this.container.documentEditor.save('Sample', 'Dotx');
+                break;
+                case 'pdf':
+                this.formatSave('Pdf');
+                break;
+                case 'html':
+                this.formatSave('Html');
+                break;
+                case 'odt':
+                this.formatSave('Odt');
+                break;
+                case 'md':
+                this.formatSave('Md');
+                break;
+                case 'rtf':
+                this.formatSave('Rtf');
+                break;
+                case 'wordml':
+                this.formatSave('Xml');
+                break;
+            }
+        }
+    }
+
     public toolItem: any = {
-        tooltipText: "Disable Image",
-        template: '<button title="Export" class="e-tbar-btn e-tbtn-txt e-control e-btn e-lib e-dropdown-btn e-caret-hide" type="button" id="dropdownbtn"><span class="e-btn-icon e-icons e-export e-icon-left"></span><span class="e-tbar-btn-text">' + "Export" + '</span><span class="e-btn-icon e-icons e-icon-right e-caret"></span></button><div id="listview"></div>',
-        text: "Export",
-        id: "dropdown"
+    tooltipText: 'Export',
+    template: '<button title="Export" class="e-tbar-btn e-tbtn-txt e-control e-btn e-lib e-dropdown-btn e-caret-hide" type="button" id="dropdownbtn"><span class="e-btn-icon e-icons e-export e-icon-left"></span><span class="e-tbar-btn-text">' + 'Export' + '</span><span class="e-btn-icon e-icons e-icon-right e-caret"></span></button><div id="listview"></div>',
+    id: 'dropdownbtn',
+    text: 'Export',
   };
   data: any = {
     target: '#listview',
-    cssClass: 'e-caret-hide'
+    cssClass: 'e-caret-hide',
+    created: (): void => {
+      this.isDropDownButtonCreated = true;
+    }
   };
   public dropdown: DropDownButton = new DropDownButton(this.data);
-  
+  public isDropDownButtonCreated: boolean = false;
   dataSource: { [key: string]: Object }[] = [
     { class: 'data', text: 'Syncfusion Document Text (*.sfdt)', id: 'sfdt', category: 'Client side exporting' },
     { class: 'data', text: 'Word Document (*.docx)', id: 'docx', category: 'Client side exporting' },
@@ -175,14 +241,44 @@ public change(args: SelectEventArgs) {
     http.send(JSON.stringify(sfdt));
 }
 
+    initializeExportButton(): void {
+        if (this.listviewInstance && this.dropdown) {
+            if (this.isDropDownButtonCreated) {
+                // Destroy previous instances
+                this.listviewInstance.destroy();
+
+                this.dropdown.destroy();
+            }
+
+            this.dropdown = new DropDownButton({
+                target: '#listview',
+                cssClass: 'e-caret-hide',
+                created: (): void => {
+                    this.isDropDownButtonCreated = true;
+                }
+            });
+
+            this.listviewInstance = new ListView({
+                dataSource: this.dataSource,
+                // Map the appropriate columns to fields property
+                fields: { text: 'text', groupBy: 'category' },
+                select: this.change.bind(this)
+            });
+
+            this.dropdown.appendTo('#dropdownbtn');
+            this.listviewInstance.appendTo('#listview');
+        }
+    }
+
     onCreate(): void {
-        
+        this.switch.checked = true;
         let titleBarElement: HTMLElement = document.getElementById('default_title_bar');
         this.titleBar = new TitleBar(titleBarElement, this.container.documentEditor, true);
         this.container.documentEditor.open(JSON.stringify(defaultDocument));
         this.container.documentEditor.documentName = 'Getting Started';
         this.container.documentEditorSettings.showRuler = true;
         this.titleBar.updateDocumentTitle();
+        this.titleBar.showButtons(false);
         this.dropdown.appendTo('#dropdownbtn');
         this.listviewInstance.appendTo("#listview");
     }
@@ -192,6 +288,15 @@ public change(args: SelectEventArgs) {
         }
         this.container.documentEditor.focusIn();
     }
-
-    
+    public toolBarModeChange(e: any): void {
+        if (e.checked) {
+            this.container.toolbarMode = "Ribbon";
+        } else {
+            this.container.toolbarMode = "Toolbar";
+            setTimeout((): void => {
+                this.initializeExportButton();
+            }, 300);
+        }
+        this.titleBar.showButtons(this.container.toolbarMode != "Ribbon");
+    }
 }

@@ -60,7 +60,7 @@ export const spreadsheetAppRoutes: Object[] = [
         description: 'This demo for Syncfusion<sup>®</sup> Angular Spreadsheet control includes hyperlink.'
     }, {
         path: ':theme/spreadsheet/ai-smart-spreadsheet', component: SmartSpreadsheetComponent,
-        name: 'Smart Spreadsheet', category: 'Smart AI Solutions', order: '02', type: 'update',
+        name: 'Smart Spreadsheet', category: 'Smart AI Solutions', order: '02',
         description: 'This demo showcases the Spreadsheet AI feature.'
     },
     {
@@ -75,7 +75,7 @@ export const spreadsheetAppRoutes: Object[] = [
     },
     {
         path: ':theme/spreadsheet/cell-formatting', component: CellFormatController,
-        name: 'Cell Formatting', category: 'Formatting',type: 'update', order: '04',
+        name: 'Cell Formatting', category: 'Formatting', order: '04',
         description: 'This demo for Syncfusion<sup>®</sup> Angular Spreadsheet control shows the way of cell formatting with minimum configuration.'
     },
     {

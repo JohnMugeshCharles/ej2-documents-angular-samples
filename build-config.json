@@ -1,0 +1,28 @@
+{
+    "build": {
+        "pdfviewer": [
+            {
+                "SampleorderJSON": "import { pdfViewerAppRoutes } from '../pdfviewer/pdfviewer.module';\nexport let samplesList: any = [\n    {\n        'name': \"PDF Viewer\", 'type': 'update', 'category': \"File Viewers & Editors\", 'order': '11', 'path': \"pdfviewer\", 'samples': pdfViewerAppRoutes, 'ftName': \"pdfviewer\"\n    }\n];",
+                "SBRouteJSON": "import { NgModule } from '@angular/core';\nimport { RouterModule } from '@angular/router';\nimport { PdfViewerSampleModule } from '../pdfviewer/pdfviewer.module';\n\nconst appRoutes: any = [\n    // File Viewers & Editors\n    { path: 'pdfviewer', loadChildren: import('../pdfviewer/pdfviewer.module').then(m=>m.PdfViewerSampleModule) },\n    { path: ':theme/pdfviewer/:sample', redirectTo: 'material/pdfviewer/default' },\n    { path: '', redirectTo: 'material/pdfviewer/default', pathMatch: 'full' },\n    { path: '**', redirectTo: 'material/pdfviewer/default' }\n];\n\n@NgModule({\n    imports: [\n        // Editors & Viewers\n        PdfViewerSampleModule,\n        RouterModule.forRoot(appRoutes)\n    ],\n    declarations: [\n    ],\n    exports: [\n        RouterModule,\n    ]\n})\nexport class SBRoutingModule { }"
+            }
+        ],
+        "spreadsheet": [
+            {
+                "SampleorderJSON": "import { spreadsheetAppRoutes } from '../spreadsheet/spreadsheet.module';\nexport let samplesList: any = [\n    {\n        'name': 'Spreadsheet', 'category': 'Grids', 'order': '04', 'path': 'spreadsheet', 'samples': spreadsheetAppRoutes, 'ftName': 'spreadsheet'\n    }\n];",
+                "SBRouteJSON":"import { NgModule } from '@angular/core';\nimport { RouterModule } from '@angular/router';\nimport { SpreadsheetSampleModule } from '../spreadsheet/spreadsheet.module';\n\nconst appRoutes: any = [\n    // Grids\n    { path: 'spreadsheet', loadChildren: import('../spreadsheet/spreadsheet.module').then(m=>m.SpreadsheetSampleModule) },\n    { path: ':theme/spreadsheet/:sample', redirectTo: 'material/spreadsheet/default' },\n    { path: '', redirectTo: 'material/spreadsheet/default', pathMatch: 'full' },\n    { path: '**', redirectTo: 'material/spreadsheet/default' }\n];\n\n@NgModule({\n    imports: [\n        // Grids\n        SpreadsheetSampleModule,\n        RouterModule.forRoot(appRoutes)\n    ],\n    declarations: [\n    ],\n    exports: [\n        RouterModule,\n    ]\n})\nexport class SBRoutingModule { }"
+            }
+        ],
+        "document-editor": [
+            {
+                "SampleorderJSON":  "import { documentEditorAppRoutes } from '../document-editor/document-editor.module';\nexport let samplesList: any = [\n    {\n        'name': 'Word Processor', 'category': 'File Viewers & Editors', 'order': '03', 'path': 'document-editor', 'samples': documentEditorAppRoutes, 'ftName': 'document-editor'\n    }\n];",
+                "SBRouteJSON":"import { NgModule } from '@angular/core';\nimport { RouterModule } from '@angular/router';\nimport { DocumentEditorSampleModule } from '../document-editor/document-editor.module';\n \nconst appRoutes: any = [\n    // File Viewers & Editors\n    { path: 'document-editor', loadChildren: import('../document-editor/document-editor.module').then(m=>m.DocumentEditorSampleModule) },\n    { path: ':theme/document-editor/:sample', redirectTo: 'material/document-editor/default' },\n    { path: '', redirectTo: 'material/document-editor/default', pathMatch: 'full' },\n    { path: '**', redirectTo: 'material/document-editor/default' }\n \n];\n \n@NgModule({\n    imports: [\n        // Editors & Viewers\n        DocumentEditorSampleModule,\n        RouterModule.forRoot(appRoutes)\n    ],\n    declarations: [\n    ],\n    exports: [\n        RouterModule,\n    ]\n})\nexport class SBRoutingModule { }"
+            }
+        ],
+        "pdf": [
+            {
+                "SampleorderJSON": "import { pdfAppRoutes } from '../pdf/pdf.module';\nexport let samplesList: any = [\n    {\n        'name': \"PDF\", 'type': 'preview', 'category': \"Document Processing Library\", 'order': '13', 'path': \"pdf\", 'samples': pdfAppRoutes, 'ftName': \"pdf\"\n    }\n];",
+                "SBRouteJSON": "import { NgModule } from '@angular/core';\nimport { RouterModule } from '@angular/router';\nimport { PdfSampleModule } from '../pdf/pdf.module';\n\nconst appRoutes: any = [\n    // Document Processing Library\n    { path: 'pdf', loadChildren: import('../pdf/pdf.module').then(m=>m.PdfSampleModule) },\n    { path: ':theme/pdf/:sample', redirectTo: 'material/pdf/default' },\n    { path: '', redirectTo: 'material/pdf/default', pathMatch: 'full' },\n    { path: '**', redirectTo: 'material/pdf/default' }\n];\n\n@NgModule({\n    imports: [\n        // Document Processing Library\n        PdfSampleModule,\n        RouterModule.forRoot(appRoutes)\n    ],\n    declarations: [\n    ],\n    exports: [\n        RouterModule,\n    ]\n})\nexport class SBRoutingModule { }"
+            }
+        ]
+    }
+}

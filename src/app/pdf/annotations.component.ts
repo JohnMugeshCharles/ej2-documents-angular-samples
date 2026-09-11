@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { Button } from '@syncfusion/ej2-buttons';
+import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import {
     PdfAnnotationBorder,
@@ -31,14 +31,19 @@ import {
     PdfTextMarkupAnnotationType,
     Rectangle,
     PdfPageSettings,
-    PdfMargins
+    PdfMargins,
+    PdfCircleMeasurementType,
+    PdfBorderStyle,
+    PdfAnnotationIntent,
+    PdfLineEndingStyle,
+    PdfFontStyle
 } from '@syncfusion/ej2-pdf';
 
 @Component({
     selector: 'control-content',
     templateUrl: './annotations.html',
     standalone: true,
-    imports: [FormsModule]
+    imports: [FormsModule, CommonModule]
 })
 export class AnnotationsComponent implements OnInit {
     // Bound to the "Flatten annotation" checkbox
@@ -86,6 +91,8 @@ export class AnnotationsComponent implements OnInit {
             const buf = await file.arrayBuffer();
             this.fileBytes = buf instanceof Uint8Array ? buf : new Uint8Array(buf);
             this.fileSelected = true;
+            // Clear any validation error message when a valid PDF is uploaded
+            this.hideNote();
         } catch (err: any) {
             this.showNote(err?.message || 'Error reading file.');
         }
@@ -101,7 +108,7 @@ export class AnnotationsComponent implements OnInit {
     }
 
     ngAfterViewInit(): void {
-        // Wire up UI controls: a submit button that creates a new PDF
+        // Wire up UI controls: a submit button that creates a new PDF with annotations
         const submitEl = document.getElementById('submit') as HTMLInputElement | null;
         if (submitEl) {
             submitEl.addEventListener('click', (e) => { e.preventDefault(); this.createAndSavePdf(); });
@@ -112,7 +119,6 @@ export class AnnotationsComponent implements OnInit {
         const flatBtnEl = document.getElementById('flatternButton') as HTMLButtonElement | null;
         if (flatBtnEl) {
             flatBtnEl.setAttribute('aria-disabled', 'true');
-            flatBtnEl.addEventListener('click', (e) => { e.preventDefault(); void this.flattenUploadedPdf(); });
         }
     }
 
@@ -462,30 +468,44 @@ export class AnnotationsComponent implements OnInit {
 
             // Rotated free text annotation: demonstrates rotation and callout lines
             // `rotationAngle` affects how annotation content is rendered.
-            const freeText0: PdfFreeTextAnnotation = new PdfFreeTextAnnotation({ x: 80, y: 160, width: 100, height: 50 }, {
+            const rotatedFreeTextAnnotation: PdfFreeTextAnnotation = new PdfFreeTextAnnotation({ x: 80, y: 160, width: 100, height: 50 }, {
                 textMarkUpColor: { r: 0, g: 128, b: 0 }, font: new PdfStandardFont(PdfFontFamily.helvetica, 7), text: 'Free Text with Callouts', borderColor: { r: 0, g: 0, b: 255 },
-                border: new PdfAnnotationBorder({ width: 0.5 }), calloutLines: [{ x: 45, y: 220 }, { x: 60, y: 175 }, { x: 80, y: 175 }]
+                border: new PdfAnnotationBorder({ width: 0.5 }), calloutLines: [{ x: 45, y: 225 }, { x: 60, y: 180 }, { x: 80, y: 180}]
             });
-            freeText0.flags = PdfAnnotationFlag.print;
-            freeText0.rotationAngle = PdfRotationAngle.angle90;
-            freeText0.color = { r: 255, g: 255, b: 0 };
-            freeText0.setAppearance(true);
+            rotatedFreeTextAnnotation.flags = PdfAnnotationFlag.print;
+            rotatedFreeTextAnnotation.rotationAngle = PdfRotationAngle.angle90;
+            rotatedFreeTextAnnotation.color = { r: 255, g: 255, b: 0 };
+            rotatedFreeTextAnnotation.setAppearance(true);
             secondPage.graphics.drawString('Rotated FreeText Annotation', font, { x: 40, y: 130, width: 150, height: 30 }, brush as any);
-            secondPage.annotations.add(freeText0);
+            secondPage.annotations.add(rotatedFreeTextAnnotation);
 
             // Cloud-style rectangle: demonstrates border effects (cloudy edges)
-            const cloudannotation: PdfRectangleAnnotation = new PdfRectangleAnnotation({ x: 30, y: 300, width: 100, height: 50 }, {
+            const rectangleCloudAnnotation: PdfRectangleAnnotation = new PdfRectangleAnnotation({ x: 40, y: 430, width: 100, height: 50 }, {
                 text: 'Rectangle Cloud Annotation', color: { r: 255, g: 0, b: 0 }, innerColor: { r: 0, g: 0, b: 255 }, border: new PdfAnnotationBorder({ width: 1 })
             });
-            let bordereffect = new PdfBorderEffect();
-            bordereffect.intensity = 2;
-            bordereffect.style = PdfBorderEffectStyle.cloudy;
-            cloudannotation.borderEffect = bordereffect;
-            cloudannotation.border.width = 1;
-            cloudannotation.setAppearance(true);
-            secondPage.graphics.drawString('Rectangle Cloud Annotation', font, { x: 40, y: 260, width: 300, height: 50 }, brush as any);
-            cloudannotation.flags = PdfAnnotationFlag.print;
-            secondPage.annotations.add(cloudannotation);
+            let cloudBorderEffect = new PdfBorderEffect();
+            cloudBorderEffect.intensity = 2;
+            cloudBorderEffect.style = PdfBorderEffectStyle.cloudy;
+            rectangleCloudAnnotation.borderEffect = cloudBorderEffect;
+            rectangleCloudAnnotation.border.width = 1;
+            rectangleCloudAnnotation.setAppearance(true);
+            secondPage.graphics.drawString('Rectangle Cloud Annotation', font, { x: 40, y: 390, width: 300, height: 50 }, brush as any);
+            rectangleCloudAnnotation.flags = PdfAnnotationFlag.print;
+            secondPage.annotations.add(rectangleCloudAnnotation);
+
+            // Create a new circle annotation with circle bounds and diameter measurement
+            let circleCloudyAnnotation: PdfCircleAnnotation = new PdfCircleAnnotation({ x: 50, y: 620, width: 120, height: 120 }, {
+                text: 'Diameter',
+                author: 'Syncfusion',
+                color: { r: 255, g: 0, b: 0 },
+                innerColor: { r: 0, g: 0, b: 255 },
+                opacity: 0.9,
+                border: new PdfAnnotationBorder({ width: 2, hRadius: 0, vRadius: 0 })
+            });
+            circleCloudyAnnotation.borderEffect.style = PdfBorderEffectStyle.cloudy;
+            circleCloudyAnnotation.borderEffect.intensity = 1;
+            secondPage.graphics.drawString('Circle Cloud Annotation', font, { x: 50, y: 580, width: 200, height: 30 }, brush as any);
+            secondPage.annotations.add(circleCloudyAnnotation);
 
             // Rubber stamp annotation: used to visually mark a page with a stamp-like graphic
             const rubberStampAnnotation: PdfRubberStampAnnotation = new PdfRubberStampAnnotation({ x: 355, y: 310, width: 150, height: 50 }, {
@@ -496,28 +516,46 @@ export class AnnotationsComponent implements OnInit {
             secondPage.graphics.drawString('Rubber Stamp Annotation', font, { x: 350, y: 260, width: 200, height: 30 }, brush as any);
             secondPage.annotations.add(rubberStampAnnotation);
 
-            const cloudpolypoints = [{ x: 436, y: 254 }, { x: 491, y: 324 }, { x: 461, y: 374 }, { x: 411, y: 344 }, { x: 391, y: 294 }, { x: 431, y: 264 }, { x: 436, y: 254 }];
             // Polygon cloud annotation: polygon with cloudy border effect
-            const polygonCloud = new PdfPolygonAnnotation(cloudpolypoints, {
+            const cloudPolyPoints = [{ x: 436, y: 254 }, { x: 491, y: 324 }, { x: 461, y: 374 }, { x: 411, y: 344 }, { x: 391, y: 294 }, { x: 431, y: 264 }, { x: 436, y: 254 }];
+            const polygonCloudAnnotation = new PdfPolygonAnnotation(cloudPolyPoints, {
                 text: 'Polygon Cloud Annotation', color: { r: 255, g: 0, b: 0 }, innerColor: { r: 0, g: 0, b: 255 }, border: new PdfAnnotationBorder({ width: 1 })
             });
-            polygonCloud.flags = PdfAnnotationFlag.print;
-            bordereffect.intensity = 2;
-            bordereffect.style = PdfBorderEffectStyle.cloudy;
-            polygonCloud.borderEffect = bordereffect;
-            polygonCloud.setAppearance(true);
+            polygonCloudAnnotation.flags = PdfAnnotationFlag.print;
+            let polygonCloudBorderEffect = new PdfBorderEffect();
+            polygonCloudBorderEffect.intensity = 2;
+            polygonCloudBorderEffect.style = PdfBorderEffectStyle.cloudy;
+            polygonCloudAnnotation.borderEffect = polygonCloudBorderEffect;
+            polygonCloudAnnotation.setAppearance(true);
             secondPage.graphics.drawString('Polygon Cloud Annotation', font, { x: 350, y: 390, width: 150, height: 30 }, brush as any);
-            secondPage.annotations.add(polygonCloud);
+            secondPage.annotations.add(polygonCloudAnnotation);
+
+            // Create new free text annotation with callout styling
+            let freeTextAnnotation: PdfFreeTextAnnotation = new PdfFreeTextAnnotation({ x: 320, y: 630, width: 180, height: 80 },
+                {
+                    font: new PdfStandardFont(PdfFontFamily.helvetica, 10),
+                    textMarkUpColor: { r: 40, g: 40, b: 40 },
+                    borderColor: { r: 255, g: 0, b: 0 },
+                    opacity: 1,
+                    border: new PdfAnnotationBorder({ width: 1 })
+                });
+            freeTextAnnotation.color = { r: 0, g: 0, b: 255};
+            freeTextAnnotation.flags = PdfAnnotationFlag.print;
+            freeTextAnnotation.borderEffect.style = PdfBorderEffectStyle.cloudy;
+            freeTextAnnotation.borderEffect.intensity = 1;
+            freeTextAnnotation.setAppearance(true);
+            secondPage.graphics.drawString('Free Text Cloud Annotation', font, { x: 350, y: 580, width: 200, height: 30 }, brush as any);
+            secondPage.annotations.add(freeTextAnnotation);
 
             // Redaction annotation: shows how to mark content as redacted and overlay text
             // `overlayText` with `repeatText` simulates stamping the redaction area
-            const redactionAnnotation2 = new PdfRedactionAnnotation({ x: 40, y: 430, width: 100, height: 50 }, {
+            const redactionAnnotation = new PdfRedactionAnnotation({ x: 30, y: 300, width: 100, height: 50 }, {
                 borderColor: { r: 255, g: 0, b: 0 }, innerColor: { r: 255, g: 165, b: 0 }, textColor: { r: 0, g: 128, b: 0 }, text: 'Redaction Annotation', font: new PdfStandardFont(PdfFontFamily.helvetica, 13), overlayText: 'REDACTED', repeatText: true, textAlignment: PdfTextAlignment.left
             });
-            redactionAnnotation2.setAppearance(true);
-            secondPage.graphics.drawString('Redaction Annotation', font, { x: 40, y: 390, width: 100, height: 50 }, brush as any);
-            redactionAnnotation2.flags = PdfAnnotationFlag.print;
-            secondPage.annotations.add(redactionAnnotation2);
+            redactionAnnotation.setAppearance(true);
+            secondPage.graphics.drawString('Redaction Annotation', font, { x: 40, y: 260, width: 100, height: 50 }, brush as any);
+            redactionAnnotation.flags = PdfAnnotationFlag.print;
+            secondPage.annotations.add(redactionAnnotation);
 
             // Finalize and save the document. If the UI checkbox requests flattening,
             // set `flatten` and re-load the saved bytes into a new PdfDocument to
@@ -525,7 +563,7 @@ export class AnnotationsComponent implements OnInit {
             if (this.getFlattenCheckboxChecked()) {
                 const data = pdfDoc.save();
                 // Reload and save again to produce a flattened output file
-                let loadedDocument = new PdfDocument(data);
+                const loadedDocument = new PdfDocument(data);
                 loadedDocument.flatten = true;
                 loadedDocument.save('AnnotationFlatten.pdf');
                 loadedDocument.destroy();
@@ -539,27 +577,30 @@ export class AnnotationsComponent implements OnInit {
         }
     }
 
-    // Flattens an uploaded PDF file (reads the file from the file input state)
+    // Flattens an uploaded PDF file (reads the file from the file input element)
     async flattenUploadedPdf(): Promise<void> {
+        // Hide any existing note and process an uploaded PDF to flatten annotations
         this.hideNote();
         try {
-            // If user already selected file and we have bytes, use them; otherwise try to read from the DOM
-            let bytes = this.fileBytes;
-            if (!bytes) {
-                const fileEl = document.getElementById('file') as HTMLInputElement | null;
-                if (!fileEl || !fileEl.files || fileEl.files.length === 0) {
-                    this.showNote('Please select a PDF file to flatten.');
-                    return;
-                }
-                const file = fileEl.files[0];
-                const buf = await file.arrayBuffer();
-                bytes = buf instanceof Uint8Array ? buf : new Uint8Array(buf);
+            // Validate file input and read as ArrayBuffer
+            const fileEl = document.getElementById('file') as HTMLInputElement | null;
+            if (!fileEl || !fileEl.files || !fileEl.files.length) {
+                this.showNote('Please select a PDF file to flatten.');
+                return;
             }
-            const pdfDoc = new PdfDocument(bytes as any);
+            const file = fileEl.files[0];
+            const buf = await file.arrayBuffer();
+            // Normalize to Uint8Array for PdfDocument constructor
+            const bytes = buf instanceof Uint8Array ? buf : new Uint8Array(buf);
+            // Load the uploaded PDF bytes into a PdfDocument instance
+            const pdfDoc = new PdfDocument(bytes);
+            // Set flatten to true so annotations are merged into page content
             pdfDoc.flatten = true;
+            // Save the flattened result and release resources
             pdfDoc.save('AnnotationFlatten.pdf');
             pdfDoc.destroy();
         } catch (err: any) {
+            // Show any error to the user via the note area
             this.showNote(err?.message || 'Error while flattening PDF.');
         }
     }

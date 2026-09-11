@@ -1,0 +1,452 @@
+<div class="control-section text-comparison">
+    <button id="mobileUploadBtn" class="e-btn text-comparison-mobile-upload-btn" type="button" (click)="onMobileUploadClick()">
+        <span class="e-icons e-upload e-upload-1"></span>Upload files
+    </button>
+    <div class="text-comparison-uploaders-section">
+        <div class="text-comparison-mobile-upload-header">
+            <button id="mobileCloseBtn" class="e-btn e-icon-btn text-comparison-mobile-close-btn" type="button"
+                aria-label="Close file uploaders" (click)="onMobileCloseClick()">
+                <span class="e-icons e-close"></span>
+            </button>
+            <span>Upload files</span>
+        </div>
+        <!-- Original PDF Uploader -->
+        <div class="text-comparison-uploader" id="originalDropArea">
+            <div class="text-comparison-uploader-content">
+                <div class="text-comparison-uploader-top-row">
+                    <button id="originalFileButton" class="e-btn e-outline text-comparison-file-button"
+                        type="button" (click)="onOriginalFileButtonClick()">Choose file</button>
+                    <span class="text-comparison-uploader-title">Original Document</span>
+                </div>
+                <div class="text-comparison-uploader-file-row">
+                    <span class="text-comparison-uploader-filename" id="originalFileName">{{ originalFileName }}</span>
+                    <ejs-uploader #originalUploader
+                        id="originalFileUploader"
+                        [dropArea]="'#originalDropArea'"
+                        [multiple]="false"
+                        [allowedExtensions]="'.pdf'"
+                        (selected)="onFileChange($event, true)"
+                        class="text-comparison-file-input">
+                    </ejs-uploader>
+                    <button id="originalRemoveBtn" class="e-btn e-lib e-icon-btn text-comparison-remove-btn"
+                        type="button" aria-label="Remove original PDF" title="Remove file" 
+                        [style.display]="showOriginalRemoveBtn ? 'inline-flex' : 'none'"
+                        (click)="removeFile(true)">
+                        <span class="e-icons e-trash"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Modified PDF Uploader -->
+        <div class="text-comparison-uploader" id="modifiedDropArea">
+            <div class="text-comparison-uploader-content">
+                <div class="text-comparison-uploader-top-row">
+                    <button id="modifiedFileButton" class="e-btn e-outline text-comparison-file-button"
+                        type="button" (click)="onModifiedFileButtonClick()">Choose file</button>
+                    <span class="text-comparison-uploader-title">Modified Document</span>
+                </div>
+                <div class="text-comparison-uploader-file-row">
+                    <span class="text-comparison-uploader-filename" id="modifiedFileName">{{ modifiedFileName }}</span>
+                    <ejs-uploader #modifiedUploader
+                        id="modifiedFileUploader"
+                        [dropArea]="'#modifiedDropArea'"
+                        [multiple]="false"
+                        [allowedExtensions]="'.pdf'"
+                        (selected)="onFileChange($event, false)"
+                        class="text-comparison-file-input">
+                    </ejs-uploader>
+                    <button id="modifiedRemoveBtn" class="e-btn e-lib e-icon-btn text-comparison-remove-btn"
+                        type="button" aria-label="Remove modified PDF" title="Remove file" 
+                        [style.display]="showModifiedRemoveBtn ? 'inline-flex' : 'none'"
+                        (click)="removeFile(false)">
+                        <span class="e-icons e-trash"></span>
+                    </button>
+                </div>
+            </div>
+        </div>
+
+        <!-- Compare Button -->
+        <button id="compareBtn" class="e-btn e-primary text-comparison-compare-btn" type="button"
+            [disabled]="!canCompare" (click)="handleCompare()">Compare</button>
+    </div>
+
+    <div id="container">
+        <div #comparerContainer id="comparer-container" style="height: 640px;"></div>
+    </div>
+</div>
+
+<div id="action-description">
+    <p>This sample showcases the <strong>Semantic Text Comparison</strong> feature of the PDF Viewer component, enabling
+        users to compare two PDF documents and identify textual differences. The PdfComparer provides an intuitive
+        interface with synchronized viewers and a differences panel for efficient document comparison.</p>
+</div>
+<div id="description">
+    <p>This sample demonstrates the <strong>PdfComparer</strong> of the PDF Viewer, which allows side-by-side comparison
+        of two PDF documents. Key features include:</p>
+    <ul>
+        <li><strong>Synchronized Viewers</strong> &mdash; Navigate, zoom, and scroll both documents simultaneously for
+            seamless comparison.</li>
+        <li><strong>Differences Panel</strong> &mdash; View a consolidated list of all detected differences categorized
+            as added, deleted, or replaced.</li>
+        <li><strong>Intelligent Highlighting</strong> &mdash; Textual differences are highlighted directly within the
+            documents using color-coded annotations.</li>
+        <li><strong>Interactive Navigation</strong> &mdash; Click on any difference in the panel to automatically
+            navigate both viewers to the relevant page and highlight the specific content.</li>
+        <li><strong>Customizable Colors</strong> &mdash; Configure before/after colors and opacity levels to suit your
+            viewing preferences.</li>
+        <li><strong>Toggle Highlights</strong> &mdash; Enable or disable highlight display without losing comparison
+            data.</li>
+    </ul>
+    <p>The comparison categorizes differences as follows:</p>
+    <ul>
+        <li><strong>Added</strong> &mdash; Content newly introduced in the target document.</li>
+        <li><strong>Deleted</strong> &mdash; Content removed from the source document.</li>
+        <li><strong>Replaced</strong> &mdash; Content that has been modified between the source and target documents.
+        </li>
+    </ul>
+    <p>This functionality is invaluable for document reviews, contract validation, version control tracking, compliance
+        auditing, and collaborative editing workflows.</p>
+    <p>More information about the PDF Viewer and Semantic Text Comparison can be found in this <a target="_blank"
+            href="https://help.syncfusion.com/document-processing/pdf/pdf-viewer/angular/overview">documentation
+            section</a>.</p>
+</div>
+
+<style>
+    .text-comparison .text-comparison-file-input {
+        display: none;
+    }
+
+    .text-comparison-mobile-upload-btn,
+    .text-comparison-mobile-upload-header,
+    .text-comparison-mobile-close-btn {
+        display: none;
+    }
+
+    /* Hide duplicate uploader buttons generated by EJ2 */
+    .text-comparison .text-comparison-file-row .e-upload {
+        display: none !important;
+    }
+
+    /* Outer container */
+    .text-comparison .text-comparison-uploaders-section {
+        display: grid;
+        grid-template-columns: 1fr 1fr 180px;
+        gap: 18px;
+        padding: 16px;
+        border: 1px solid #d9d9d9;
+        border-radius: 4px;
+        margin-bottom: 20px;
+        align-items: center;
+        background: #fff;
+    }
+
+    /* Uploader card */
+    .text-comparison .text-comparison-uploader {
+        min-height: 70px;
+        padding: 14px;
+        border: 1px dashed #d8d8d8;
+        border-radius: 4px;
+        background: #fff;
+    }
+
+    .text-comparison .text-comparison-uploader-top-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+    }
+
+    .text-comparison .text-comparison-file-button {
+        min-width: 104px;
+        height: 32px;
+        font-size: 14px;
+        font-weight: 400;
+    }
+
+    .text-comparison .text-comparison-uploader-title {
+        font-size: 13px;
+        font-weight: 600;
+    }
+
+    .text-comparison .text-comparison-uploader-file-row {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        margin-top: 09px;
+        min-height: 24px;
+        /* width: 100%; */
+    }
+
+    .text-comparison .text-comparison-uploader-filename {
+        color: #666;
+        font-size: 12px;
+    }
+
+    .text-comparison .text-comparison-uploader-filename:empty::before {
+        content: "Or drop files here";
+        color: #536071;
+        font-size: 14px;
+    }
+
+    .text-comparison .text-comparison-remove-btn {
+        margin-left: auto;
+        padding: 4px 8px;
+        border: none;
+    }
+
+    .text-comparison .text-comparison-remove-btn .e-trash {
+        color: #666;
+        transition: color 0.2s ease;
+    }
+
+    /* Hover */
+    .text-comparison .text-comparison-remove-btn:hover,
+    .text-comparison .text-comparison-remove-btn:focus {
+        background: transparent !important;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    .text-comparison .text-comparison-remove-btn:hover .e-trash,
+    .text-comparison .text-comparison-remove-btn:focus .e-trash {
+        color: #d32f2f !important;
+    }
+
+    /* Optional active state */
+    .text-comparison .text-comparison-remove-btn:active .e-trash {
+        color: #b71c1c !important;
+    }
+
+    #comparer-container {
+        height: 640px;
+        overflow: hidden;
+        display: flex;
+    }
+
+    #pdf-comparer-left,
+    .original-viewer,
+    .text-comparison-original-region,
+    #pdf-comparer-right,
+    .modified-viewer,
+    .text-comparison-modified-region {
+        height: 100%;
+        overflow: hidden;
+    }
+
+    /* Difference Panel */
+    #pdf-comparer-panel,
+    .difference-panel,
+    .text-comparison-difference-region {
+        height: 100%;
+        overflow: hidden;
+        background: #f7f7f7;
+    }
+
+    /* Common scrollable region */
+    .text-comparison-scroll-region {
+        overflow-y: auto !important;
+        overflow-x: hidden !important;
+        scrollbar-width: thin;
+        scrollbar-color: #868585 #f1f1f1;
+    }
+
+    /* Difference panel cards */
+    .text-comparison .e-panel-wrapper {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow: hidden;
+        background: #f5f5f5;
+    }
+
+    /* Header */
+    .text-comparison .e-difference-panel-header {
+        background: #0f6cbd;
+        color: #fff;
+        min-height: 48px;
+        display: flex;
+        align-items: center;
+        padding: 0 12px;
+        font-size: 14px;
+        font-weight: 600;
+    }
+
+    .text-comparison .e-difference-panel-header h3 {
+        margin: 0;
+        color: #fff;
+    }
+
+    /* Highlight Changes Row */
+    .text-comparison .e-highlight-toggle-container {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        padding: 12px 16px;
+        background: #fff;
+        border-bottom: 1px solid #ddd;
+    }
+
+    .text-comparison .e-highlight-toggle-container label {
+        font-size: 14px;
+        color: #101112;
+    }
+
+    /* Scroll area */
+    .text-comparison .e-differences-list {
+        padding: 8px;
+        overflow-y: auto;
+    }
+
+    /* Card */
+    .text-comparison .e-difference-card {
+        background: #fff;
+        border: 1px solid #d8d8d8;
+        border-radius: 4px;
+        margin-bottom: 10px;
+        box-shadow: 0 1px 3px rgba(0, 0, 0, .1);
+    }
+
+    /* Card Header */
+    .text-comparison .e-diff-header-row {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        height: 36px;
+        padding: 0 10px;
+        background: #f3f4f6;
+        border-bottom: 1px solid #e5e7eb;
+    }
+
+    /* REPLACED */
+    .text-comparison .e-diff-badge {
+        font-size: 10px;
+        font-weight: 600;
+        color: #111827;
+        text-transform: uppercase;
+    }
+
+    /* PAGE 1 */
+    .text-comparison .e-diff-page-info {
+        font-size: 10px;
+        color: #6b7280;
+    }
+
+    /* Deleted Text */
+    .text-comparison .e-diff-old-text {
+        margin: 08px;
+        padding: 10px;
+        background: #fef2f2;
+        color: #dc2626;
+        border-radius: 2px;
+        text-decoration: line-through;
+        font-size: 12px;
+        line-height: 18px;
+    }
+
+    /* Added Text */
+    .text-comparison .e-diff-new-text {
+        margin: 08px;
+        padding: 10px;
+        background: #f0fdf4;
+        color: #16a34a;
+        border-radius: 2px;
+        font-size: 12px;
+        line-height: 18px;
+    }
+
+    /* Tablet */
+    @media (min-width: 769px) and (max-width: 1100px) {
+        .text-comparison .text-comparison-uploaders-section {
+            grid-template-columns: 1fr 1fr;
+        }
+
+        .text-comparison .text-comparison-compare-btn {
+            border-radius: 6px;
+            grid-column: 1 / -1;
+            justify-self: end;
+            width: 200px;
+            height: 38px;
+        }
+    }
+
+    .text-comparison .text-comparison-compare-btn:not(:disabled):not(.e-disabled):hover {
+        background: #4b3fc8 !important;
+        border: 1px solid #4b3fc8 !important;
+        color: #000000 !important;
+    }
+
+
+    .text-comparison .text-comparison-compare-btn:disabled,
+    .text-comparison .text-comparison-compare-btn.e-disabled {
+        background: #d9d9d9 !important;
+        border-color: #d9d9d9 !important;
+        color: #b0b7c3 !important;
+        opacity: 1 !important;
+        box-shadow: none !important;
+    }
+
+    .text-comparison .text-comparison-compare-btn:disabled:hover,
+    .text-comparison .text-comparison-compare-btn.e-disabled:hover {
+        cursor: not-allowed !important;
+    }
+
+    /* Hide Syncfusion uploader UI completely */
+    .text-comparison .e-upload {
+        display: none !important;
+    }
+
+    /* Hide Browse button if rendered */
+    .text-comparison .e-file-select-wrap {
+        display: none !important;
+    }
+
+    /* Hide drag/drop text */
+    .text-comparison .e-drop-text {
+        display: none !important;
+    }
+
+    /* Mobile */
+    @media (max-width: 768px) {
+        .text-comparison-mobile-upload-btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-bottom: 12px;
+        }
+
+        .text-comparison .text-comparison-uploaders-section {
+            display: none;
+        }
+
+        .text-comparison.mobile-uploaders-open .text-comparison-uploaders-section {
+            display: grid;
+            grid-template-columns: 1fr;
+            gap: 12px;
+        }
+
+        .text-comparison .text-comparison-mobile-upload-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-size: 17px;
+            font-weight: 600;
+        }
+
+        .text-comparison .text-comparison-mobile-close-btn {
+            display: inline-flex;
+        }
+
+        .text-comparison .text-comparison-uploader {
+            min-height: auto;
+        }
+
+        .text-comparison .text-comparison-compare-btn {
+            width: 100%;
+        }
+    }
+
+    /* Hide small left arrow button */
+    #pdf-comparer-panel button:first-child {
+        display: none !important;
+    }
+</style>

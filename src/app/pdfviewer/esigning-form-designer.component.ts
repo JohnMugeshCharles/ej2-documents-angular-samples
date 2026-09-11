@@ -235,7 +235,7 @@ export class ESigningFormDesignerComponent implements OnInit {
   public pageClick = (args: any) => {      
     if (this.isDropped) {
       this.isDropped = false;
-      let width = this.defaultFieldWidth;
+      let width: number = this.defaultFieldWidth;
       let height: number = this.defaultFieldHeight;
       switch (this.currentFieldType) {
         case 'SignatureField':
@@ -251,8 +251,35 @@ export class ESigningFormDesignerComponent implements OnInit {
           height = this.ListFieldSize;
           break;
       }
+      
+      // Validate and adjust bounds: ensure field stays within page boundaries
+      const pageIndex: number = this.pdfviewerControl.currentPageNumber - 1;
+      const pageWidth: number = this.pdfviewerControl.viewerBase.pageSize[pageIndex].width;
+      const pageHeight: number = this.pdfviewerControl.viewerBase.pageSize[pageIndex].height;
+
+      let x: number = args.x;
+      let y: number = args.y;
+
+      // Adjust X if field exceeds right boundary
+      if ((x + width) >= pageWidth) {
+        x = pageWidth - width - 10;
+      }
+
+      // Adjust Y if field exceeds bottom boundary
+      if ((y + height) >= pageHeight) {
+        y = pageHeight - height - 10;
+      }
+
+      // Clamp to left and top boundaries
+      if (x < 0) {
+        x = 0;
+      }
+      if (y < 0) {
+        y = 0;
+      }
+
       this.pdfviewerControl?.formDesignerModule.addFormField(this.currentFieldType as any, {
-        bounds: { X: args.x, Y: args.y, Width: width, Height: height}
+        bounds: { X: x, Y: y, Width: width, Height: height}
       } as TextFieldSettings);
     }
   }

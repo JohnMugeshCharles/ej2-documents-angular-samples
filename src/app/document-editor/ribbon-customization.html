@@ -4,7 +4,8 @@
         <div id="documenteditor_titlebar" class="e-de-ctn-title"></div>
         <div>
             <ejs-documenteditorcontainer #documenteditor id="container" [enableToolbar]=true [toolbarMode]="'Ribbon'"
-                [ribbonLayout]="'Classic'" height="590px" [serviceUrl]="hostUrl" style="display:block;" (created)="onCreate()">
+                [ribbonLayout]="'Classic'" height="590px" [serviceUrl]="hostUrl" style="display:block;" (created)="onCreate()"
+                [fileMenuItems]="fileMenuItems" (fileMenuItemClick)="fileMenuItemClick($event)">
             </ejs-documenteditorcontainer>
         </div>
     </div>

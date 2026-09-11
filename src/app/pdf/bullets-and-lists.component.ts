@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { Button } from '@syncfusion/ej2-buttons';
-import { PdfDocument, PdfBrush, PdfFontFamily, PdfFontStyle, PdfListItem, PdfListItemCollection, PdfOrderedList, PdfStringFormat, PdfUnorderedList, PdfUnorderedListStyle } from '@syncfusion/ej2-pdf';
+import { PdfDocument, PdfBrush, PdfFontFamily, PdfFontStyle, PdfListItem, PdfListItemCollection, PdfOrderedList, PdfStringFormat, PdfUnorderedList, PdfUnorderedListStyle, PdfBitmap, PdfImageMarker } from '@syncfusion/ej2-pdf';
 
 @Component({
     selector: 'control-content',
@@ -25,7 +25,7 @@ export class BulletsListsPdfComponent implements OnInit {
     ngAfterViewInit(): void {
         let button: Button = new Button();
         button.appendTo('#successbtn');
-        button.element.onclick = (): void => {
+        button.element.onclick = async (): Promise<void> => {
             // Create a new PDF document in memory
             const pdf = new PdfDocument();
             // Add a single page where all content will be drawn
@@ -115,7 +115,11 @@ export class BulletsListsPdfComponent implements OnInit {
                 style: PdfUnorderedListStyle.square,
                 brush: new PdfBrush({ r: 0, g: 0, b: 0 })
             });
-            // Attach the unordered sublist to the second bullet item of the main list
+            // Set image as unordered list marker
+            const imageData = await fetchImageAsUint8Array('https://cdn.syncfusion.com/content/pdf-resources/logo.png');
+            const imageMarker: PdfImageMarker = { image: new PdfBitmap(imageData) }
+            unorderedSubList.setMarker(imageMarker);
+            // Add the unordered sublist to the second main item
             mainList.items.at(1).subList = unorderedSubList;
             // ---------------------- Draw the combined list tree ----------------------
             // This renders mainList along with its nested sublists into the page region below the intro text.
@@ -130,6 +134,15 @@ export class BulletsListsPdfComponent implements OnInit {
             pdf.save('BulletsAndLists.pdf');
             // Always destroy to release memory/resources after save
             pdf.destroy();
+        }
+        // Helper function to fetch image as Uint8Array
+        async function fetchImageAsUint8Array(url: string): Promise<Uint8Array> {
+            const response = await fetch(url, { cache: 'no-cache' });
+            if (!response.ok) {
+                throw new Error(`Failed to fetch image from ${url}: ${response.status} ${response.statusText}`);
+            }
+            const arrayBuffer = await response.arrayBuffer();
+            return new Uint8Array(arrayBuffer);
         }
     }
 }

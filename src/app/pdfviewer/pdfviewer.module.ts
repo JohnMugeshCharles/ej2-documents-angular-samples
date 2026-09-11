@@ -9,6 +9,7 @@ import { RouterModule } from '@angular/router';
 import { DefaultPdfViewerComponent } from './default.component';
 import { CustomToolbarComponent } from './custom-toolbar.component';
 import { CustomContextMenuComponent } from './custom-context-menu.component';
+import { PrimaryToolbarCustomizationComponent } from './primary-toolbar-customization.component';
 import { RightToLeftComponent } from './right-to-left.component';
 import { FormFillingComponent } from './form-filling.component';
 import { HandwrittenComponent } from './hand-written.component';
@@ -24,11 +25,15 @@ import { MultiFormatViewerComponent } from './multi-format-viewer.component';
 import { ESigningFormDesignerComponent } from './esigning-form-designer.component';
 import { ESigningPdfFormsComponent } from './esigning-pdf-forms.component';
 import { RedactionComponent } from './redaction.component';
+import { SemanticTextComparisonComponent } from './semantic-text-comparison.component';
 import { ProgrammaticOperationsComponent } from './programmatic-operations.component';
 import { VisibleDigitalSignatureComponent } from './visible-digital-signature.component';
+import { UserRestrictionsComponent } from './user-restrictions.component';
 import { SmartFillComponent } from './smartfill.component';
 import { SmartRedactComponent } from './smartredact.component';
 import { SummarizerComponent } from './summarizer.component';
+import { PdfTextExtractorComponent } from './pdf-text-extractor.component';
+import { PdfNavigationComponent } from './pdf-navigation.component';
 
 export const pdfViewerAppRoutes: Object[] = [
     // tslint:disable-next-line:max-line-length
@@ -40,7 +45,13 @@ export const pdfViewerAppRoutes: Object[] = [
     // tslint:disable-next-line:max-line-length
     { path: ':theme/pdfviewer/summarizer', component: SummarizerComponent, name: 'Summarizer', order: '02', category: 'Smart AI Solutions', description: 'AI-assisted PDF summarization.' },
     // tslint:disable-next-line:max-line-length
-    { path: ':theme/pdfviewer/read-only', component: ReadOnlyComponent , name: 'Read-Only', order: '08', category: 'Document Security', description: 'This sample demonstrates the Pdf Viewer in Read Only mode'},
+    { path: ':theme/pdfviewer/pdf-navigation', component: PdfNavigationComponent, name: 'Programmatic Navigation', order: '03', category: 'Navigation', description: 'This sample demonstrates the programmatic PDF navigation features of the PDF Viewer', type: 'new' },
+    // tslint:disable-next-line:max-line-length
+    { path: ':theme/pdfviewer/read-only', component: ReadOnlyComponent, name: 'Read-Only', order: '08', category: 'Document Security', description: 'This sample demonstrates the Pdf Viewer in Read Only mode' },
+    // tslint:disable-next-line:max-line-length
+    { path: ':theme/pdfviewer/pdf-text-extractor', component: PdfTextExtractorComponent, name: 'Text Extractor', order: '14', category: 'Annotation', description: 'This sample demonstrates the text extraction features of PDF Viewer such as extracting text from the entire PDF document, a specific page, or a selected area, and copying the extracted text to clipboard.', type: 'new' },
+    // tslint:disable-next-line:max-line-length
+    { path: ':theme/pdfviewer/user-restrictions', component: UserRestrictionsComponent, name: 'User-based Editing Restrictions', order: '08', category: 'Document Security', description: 'Demonstrates user-based editing restrictions with role-based access control. Different users have different permission levels to edit annotations and forms.', type: 'new' },
     // tslint:disable-next-line:max-line-length
     { path: ':theme/pdfviewer/document-list', component: DocumentListComponent , name: 'Document List', order: '09', category: 'File Management', description: 'This sample demonstrates to open PDF document in Read-only mode and Editable mode using PDF Viewer in Pop-up dialog'},
     // tslint:disable-next-line:max-line-length
@@ -50,29 +61,33 @@ export const pdfViewerAppRoutes: Object[] = [
     // tslint:disable-next-line:max-line-length
     { path: ':theme/pdfviewer/redaction', component: RedactionComponent , name: 'Redaction', order: '10', category: 'Editor', description: 'This PDF viewer sample facilitates the permanent removal of sensitive or confidential data from PDF files.'},
     // tslint:disable-next-line:max-line-length
-    { path: ':theme/pdfviewer/custom-toolbar', component: CustomToolbarComponent, name: 'Toolbar', order: '11', category: 'Customization', description: 'The PDF Viewer component is used to  view and print pdf documents in web applications.' },
+    { path: ':theme/pdfviewer/semantic-text-comparison', component: SemanticTextComparisonComponent , name: 'Semantic Text Comparison', order: '11', category: 'Comparison', description: 'This sample demonstrates semantic text comparison in the PDF Viewer, enabling intelligent similarity analysis and efficient document review.', type: 'new'},
     // tslint:disable-next-line:max-line-length
-    { path: ':theme/pdfviewer/custom-context-menu', component: CustomContextMenuComponent, name: 'Context Menu', order: '11', category: 'Customization', description: 'The PDF Viewer component supports custom options for users who use to add custom options in context menu.' },
+    { path: ':theme/pdfviewer/custom-toolbar', component: CustomToolbarComponent, name: 'Toolbar', order: '12', category: 'Customization', description: 'The PDF Viewer component is used to  view and print pdf documents in web applications.' },
     // tslint:disable-next-line:max-line-length
-    { path: ':theme/pdfviewer/right-to-left', component: RightToLeftComponent, name: 'Right To Left', order: '12', category: 'Localization', description: 'The PdfViewer component is used to  view and print pdf documents in web applications.' },
+    { path: ':theme/pdfviewer/primary-toolbar-customization', component: PrimaryToolbarCustomizationComponent, name: 'Primary Toolbar Customization', order: '12', category:'Customization', description: 'This sample demonstrates how to customize the primary toolbar in the PDF Viewer by choosing a defined set of toolbar items.', type: 'new' },
+    // tslint:disable-next-line:max-line-length
+    { path: ':theme/pdfviewer/custom-context-menu', component: CustomContextMenuComponent, name: 'Context Menu', order: '12', category: 'Customization', description: 'The PDF Viewer component supports custom options for users who use to add custom options in context menu.', type: 'update'},
+    // tslint:disable-next-line:max-line-length
+    { path: ':theme/pdfviewer/right-to-left', component: RightToLeftComponent, name: 'Right To Left', order: '13', category: 'Localization', description: 'The PdfViewer component is used to  view and print pdf documents in web applications.' },
 	// tslint:disable-next-line:max-line-length
-    { path: ':theme/pdfviewer/form-filling', component: FormFillingComponent, name: 'Form Filling', order: '13', category: 'PDF Form', description: 'The PdfViewer component is used to  view and print pdf documents in web applications.' },
+    { path: ':theme/pdfviewer/form-filling', component: FormFillingComponent, name: 'Form Filling', order: '14', category: 'PDF Form', description: 'The PdfViewer component is used to  view and print pdf documents in web applications.' },
      // tslint:disable-next-line:max-line-length
-     { path: ':theme/pdfviewer/form-designer', component: FormDesignerComponent , name: 'Form Designer', order: '13', category: 'PDF Form', description: 'This sample demonstrates the creation of the supported Form fields in the PDF Viewer such as Textbox, Password, Checkbox, Radio Button, Drop Down, List box, Signature, and Initial. We can also customize these fields and can include new fields through the user interaction by switching to the designer mode.'},
+     { path: ':theme/pdfviewer/form-designer', component: FormDesignerComponent , name: 'Form Designer', order: '14', category: 'PDF Form', description: 'This sample demonstrates the creation of the supported Form fields in the PDF Viewer such as Textbox, Password, Checkbox, Radio Button, Drop Down, List box, Signature, and Initial. We can also customize these fields and can include new fields through the user interaction by switching to the designer mode.'},
     // tslint:disable-next-line:max-line-length
-    { path: ':theme/pdfviewer/esigning-form-designer', component: ESigningFormDesignerComponent , name: 'eSigning Form Designer', order: '13', category: 'PDF Form', hideOnDevice: true, description: 'This sample enables the design of a PDF form that accommodates signatures from two different users. The form includes distinct fields for each user: when the first user is selected, specific fields can be added that apply only to that user. Upon switching the user via the dropdown menu, new fields can be added for the second user. The fields for each user are distinguishable by different background colors.'},
+    { path: ':theme/pdfviewer/esigning-form-designer', component: ESigningFormDesignerComponent , name: 'eSigning Form Designer', order: '14', category: 'PDF Form', hideOnDevice: true, description: 'This sample enables the design of a PDF form that accommodates signatures from two different users. The form includes distinct fields for each user: when the first user is selected, specific fields can be added that apply only to that user. Upon switching the user via the dropdown menu, new fields can be added for the second user. The fields for each user are distinguishable by different background colors.'},
     // tslint:disable-next-line:max-line-length
-    { path: ':theme/pdfviewer/esigning-pdf-forms', component: ESigningPdfFormsComponent , name: 'eSigning PDF Forms', order: '13', category: 'PDF Form', description: 'This sample enables the design of a PDF form that accommodates signatures from two different users. The form includes distinct fields for each user: when the first user is selected, specific fields can be added that apply only to that user. Upon switching the user via the dropdown menu, new fields can be added for the second user. The fields for each user are distinguishable by different background colors.'},
+    { path: ':theme/pdfviewer/esigning-pdf-forms', component: ESigningPdfFormsComponent , name: 'eSigning PDF Forms', order: '14', category: 'PDF Form', description: 'This sample enables the design of a PDF form that accommodates signatures from two different users. The form includes distinct fields for each user: when the first user is selected, specific fields can be added that apply only to that user. Upon switching the user via the dropdown menu, new fields can be added for the second user. The fields for each user are distinguishable by different background colors.'},
     // tslint:disable-next-line:max-line-length
-    { path: ':theme/pdfviewer/annotations', component: AnnotationsComponent , name: 'Annotations', order: '14', category: 'Annotation', description: 'This sample demonstrates the creation of different types of annotations such as Text Markup, Shapes, Measurements, Free text, Stamps, Handwritten signature, ink, and sticky notes in the PDF Viewer. And also we can customize the added annotations or we can include new annotations through user interaction from the PDF Viewer.', type: 'update'},
+    { path: ':theme/pdfviewer/annotations', component: AnnotationsComponent , name: 'Annotations', order: '15', category: 'Annotation', description: 'This sample demonstrates the creation of different types of annotations such as Text Markup, Shapes, Measurements, Free text, Stamps, Handwritten signature, ink, and sticky notes in the PDF Viewer. And also we can customize the added annotations or we can include new annotations through user interaction from the PDF Viewer.', type: 'update'},
     // tslint:disable-next-line:max-line-length
-    { path: ':theme/pdfviewer/programmatic-operations', component: ProgrammaticOperationsComponent , name: 'Programmatic Operations', order: '14', category: 'Annotation', description: 'This example showcases how to programmatically create or edit various types of annotations in the PDF Viewer. These annotations include Text Markup, Shapes, Measurements, Free text, Stamps, Handwritten signature, Ink, and Sticky notes. Additionally, we can programmatically insert new annotations or programmatically update existing ones.'}, 
+    { path: ':theme/pdfviewer/programmatic-operations', component: ProgrammaticOperationsComponent , name: 'Programmatic Operations', order: '15', category: 'Annotation', description: 'This example showcases how to programmatically create or edit various types of annotations in the PDF Viewer. These annotations include Text Markup, Shapes, Measurements, Free text, Stamps, Handwritten signature, Ink, and Sticky notes. Additionally, we can programmatically insert new annotations or programmatically update existing ones.'}, 
     // tslint:disable-next-line:max-line-length
-    { path: ':theme/pdfviewer/hand-written', component: HandwrittenComponent , name: 'Handwritten Signature', order: '15', category: 'Signature', description: 'This sample demonstrates the Handwritten signature and initial support of the PDF Viewer. The signature or initial support reduces the paperwork of reviewing the contents and it is verified digitally.'},
+    { path: ':theme/pdfviewer/hand-written', component: HandwrittenComponent , name: 'Handwritten Signature', order: '16', category: 'Signature', description: 'This sample demonstrates the Handwritten signature and initial support of the PDF Viewer. The signature or initial support reduces the paperwork of reviewing the contents and it is verified digitally.'},
     // tslint:disable-next-line:max-line-length
-    { path: ':theme/pdfviewer/invisible-digital-signature', component: InvisibleDigitalSignatureComponent , name: 'Invisible Digital Signature', order: '15', category: 'Signature', description: 'This sample demonstrates how to digitally sign a PDF document from code behind using Syncfusion PDF Viewer and PDF Library'},
+    { path: ':theme/pdfviewer/invisible-digital-signature', component: InvisibleDigitalSignatureComponent , name: 'Invisible Digital Signature', order: '16', category: 'Signature', description: 'This sample demonstrates how to digitally sign a PDF document from code behind using Syncfusion PDF Viewer and PDF Library'},
     // tslint:disable-next-line:max-line-length
-    { path: ':theme/pdfviewer/visible-digital-signature', component: VisibleDigitalSignatureComponent , name: 'Visible Digital Signature', order: '15', category: 'Signature', description: 'This sample demonstrates how to digitally sign a PDF document from code behind using Syncfusion PDF Viewer and PDF Library'},
+    { path: ':theme/pdfviewer/visible-digital-signature', component: VisibleDigitalSignatureComponent , name: 'Visible Digital Signature', order: '16', category: 'Signature', description: 'This sample demonstrates how to digitally sign a PDF document from code behind using Syncfusion PDF Viewer and PDF Library'},
 ];
 
 export const PdfViewerSampleModule: ModuleWithProviders<any> = RouterModule.forChild(pdfViewerAppRoutes);

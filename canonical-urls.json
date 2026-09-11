@@ -1,0 +1,6 @@
+{
+    "spreadsheet" : "https://www.syncfusion.com/spreadsheet-editor-sdk/angular-spreadsheet-editor",
+    "document-editor" : "https://www.syncfusion.com/docx-editor-sdk/angular-docx-editor",
+    "pdfviewer" : "https://www.syncfusion.com/pdf-viewer-sdk/angular-pdf-viewer",
+    "pdf" : "https://www.syncfusion.com/document-sdk/javascript-pdf-library" 
+}

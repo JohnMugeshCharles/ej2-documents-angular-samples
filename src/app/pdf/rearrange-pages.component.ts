@@ -32,7 +32,7 @@ export class RearrangePagesComponent {
                 // Fetch the PDF as raw bytes from the remote URL
                 const bytes = await this.fetchPdfBytes(this.templateUrl);
                 // Download the PDF bytes as a file so the user can view the template
-                this.download(new Blob([bytes], { type: 'application/pdf' }), 'SyncfusionBrochure.pdf');
+                this.download(new Blob([bytes.buffer as ArrayBuffer], { type: 'application/pdf' }), 'SyncfusionBrochure.pdf');
             } catch (err) {
                 // Handle network / fetch errors
                 console.error('View Template failed', err);

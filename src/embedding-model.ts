@@ -1,5 +1,4 @@
-import { pipeline, env } from "@xenova/transformers";
-
+import { pipeline, env } from "@xenova/transformers/dist/transformers.min.js";
 // env.allowLocalModels = false;
 
 // env.localModelPath = './assets/';

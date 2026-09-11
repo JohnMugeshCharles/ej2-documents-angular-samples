@@ -1,0 +1,223 @@
+<div class="control-section" style="width: 100%;">
+  <!-- Shared container -->
+  <div style="width: 760px; margin: 10px auto">
+    <!-- Upload row -->
+    <div style="display: flex; gap: 6px">
+      <!-- Original file section-->
+      <div style="width: 360px; border-radius: 6px; padding: 14px; border: 1px dashed #ccc">
+        <!-- Top row -->
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span>Original document</span>
+          <label style=" padding: 4px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;">
+            Choose file
+            <input type="file"
+              style="display: none;"
+              accept=".docx,.sfdt"
+              (change)="onOriginalFileChange($event)" />
+          </label>
+        </div>         
+        <!-- Filename + Delete icon -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 12px; color: #666;">
+          <span>{{ getOriginalFileName() }} </span>
+          <span *ngIf="originalFile" class="e-icons e-trash" (click)="removeOriginalFile()" style="cursor: pointer;" title="Remove file"></span>
+        </div>
+      </div>
+      <!-- Revised file section-->
+      <div style="width: 360px; border-radius: 6px; padding: 14px; border: 1px dashed #ccc;">
+        <!-- Top row -->
+        <div style="display: flex; align-items: center; gap: 10px;">
+          <span>Revised document</span>
+          <label style="
+            padding: 4px 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            cursor: pointer;">
+            Choose file
+            <input type="file"
+              style="display: none;"
+              accept=".docx,.sfdt"
+              (change)="onRevisedFileChange($event)" />
+          </label>
+        </div>
+        <!-- Filename + Delete icon -->
+        <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 6px; font-size: 12px; color: #666;">
+          <span>{{ getRevisedFileName() }} </span>
+          <span *ngIf="revisedFile" class="e-icons e-trash" (click)="removeRevisedFile()" style="cursor: pointer;" title="Remove file"></span>
+        </div>
+      </div>
+    </div>
+    <!-- Checkbox, Compare & Download buttons  -->
+    <div style="display: flex; justify-content: space-between; align-items: center; margin-top: 12px;">  
+      <!-- Checkbox -->
+      <div>
+        <input
+          type="checkbox"
+          [checked]="showResult"
+          (change)="onShowResultChange($event)"
+          style="margin-right: 6px;" />
+        <span>Show comparison results with tracked changes</span>
+      </div>
+      <!-- Buttons -->
+      <div style="display: flex; gap: 10px; margin-right: 32px;">
+        <button ejs-button
+          class="e-primary"        
+          [disabled]="!originalFile || !revisedFile"
+          (click)="onCompare()">
+          Compare
+        </button>
+        <button ejs-button
+          class="e-outline e-flat e-primary"
+          (click)="onDownload()"
+          iconCss="e-icons e-download"
+          [disabled]="!compareClicked">
+          Download Result Document
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Editors Area -->
+  <div style="display: flex; gap: 6px; height: 600px; padding: 0px 10px;">
+    <!-- Left Container -->
+    <div style="width: 50%; display: flex; flex-direction: column; border: 1px solid #ddd; overflow: hidden;">
+      <div style="padding: 8px; font-weight: 600;" class="e-de-ctn-title">Original Document</div>
+      <div style="flex: 1px;">
+        <ejs-documenteditorcontainer
+          #editor1
+          [serviceUrl]="serviceUrl"
+          [height]="'560px'"
+          [width]="'100%'"
+          [enableToolbar]="false"
+          [showPropertiesPane]="false"
+        ></ejs-documenteditorcontainer>
+      </div>
+    </div>    
+    <!-- Right Editor -->
+    <div style="width: 50%; display: flex; flex-direction: column; border: 1px solid #ddd; overflow: hidden;">
+      <div class="e-de-ctn-title" style="display: flex; justify-content: space-between; align-items: center">
+        <div style="float: left; padding: 8px; font-weight: 600; flex: 1px;" >
+          {{
+            showResult
+              ? 'Result Document (with tracked changes)'
+              : 'Revised Document'
+          }}
+        </div>
+        <button ejs-button
+            *ngIf="showResult"
+            class="e-de-ctn-title"
+            iconCss="e-icons e-eye"
+            style="float: right; font-weight: 400; background: transparent; box-shadow: none; border-color: transparent; border-radius: 0px;
+                   color: inherit; font-size: 12px;"
+            title="Show/Hide Revisions Pane"
+            (click)="OnToggleRevisionPane()">
+            {{showRevisions ? ' Hide Review Pane' : ' Show Review Pane'}}
+        </button>
+      </div>      
+      <div style="flex: 1px;">
+        <ejs-documenteditorcontainer
+          #editor2
+          [serviceUrl]="serviceUrl"
+          [height]="'560px'"
+          [width]="'100%'"
+          [enableToolbar]="false"
+          [showPropertiesPane]="false"
+        ></ejs-documenteditorcontainer>
+      </div>
+    </div>
+  </div>
+
+  <!-- Waiting Popup Overlay -->
+  <div class="overlay" id="popup-overlay" style="display: none;"></div>
+  <div id='waiting-popup' style="display: none;">
+    <svg class="circular" height="40" width="40">
+      <circle class="circle-path" cx="25" cy="25" r="20" fill="none" stroke-width="6" stroke-miterlimit="10" />
+    </svg>
+  </div>
+
+  <!-- Description section -->
+  <div id="action-description">
+    <p>This example demonstrates Word document comparison in the Document Editor. Upload two documents and click "Compare" to view differences as tracked changes.</p>
+  </div>
+  <div id="description">
+    <p>This example showcases Word document comparison capabilities in the Document Editor, including:</p>
+      <ul>
+        <li>Upload and compare two versions of Word documents in DOCX or SFDT format.</li>
+        <li>Compare documents using the Syncfusion .NET Word Library (DocIO) on the server side.</li>
+        <li>View the comparison result in the Document Editor with differences highlighted as tracked changes.</li>
+        <li>Download the compared document with tracked changes preserved.</li>
+      </ul>
+      <p style="display: block;"> More information about the document editor features can be found in this <a target="_blank" href="https://help.syncfusion.com/document-processing/word/word-library/net/word-document/compare-word-documents/">documentation section.</a></p>
+  </div>
+</div>
+
+<style>
+    
+  .overlay {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(56, 56, 56, 0.5);
+    z-index: 9999;
+    display: none;
+    cursor: not-allowed;
+  }
+
+  #waiting-popup {
+    width: 56px;
+    height: 56px;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    border-radius: 50%;
+    padding: 3px;
+    background: white;
+    box-shadow: 0px 3px 6px rgba(0,0,0,.3);
+    z-index: 10000;
+    display: none;
+  }
+
+
+  .circular {
+      animation: rotate 2s linear infinite;
+      height: 50px;
+      width: 50px;
+      border-radius: 50%;
+  }
+
+  .circle-path {
+      stroke-dasharray: 1, 200;
+      stroke-dashoffset: 0;
+      animation: dash 1.5s ease-in-out infinite, color 6s ease-in-out infinite;
+      stroke-linecap: round;
+      stroke: #ff4081;
+  }
+
+  @keyframes rotate {
+      100% {
+          transform: rotate(360deg);
+      }
+  }
+
+  @keyframes dash {
+      0% {
+          stroke-dasharray: 1, 200;
+          stroke-dashoffset: 0;
+      }
+
+      50% {
+          stroke-dasharray: 89, 200;
+          stroke-dashoffset: -35;
+      }
+
+      100% {
+          stroke-dasharray: 89, 200;
+          stroke-dashoffset: -124;
+      }
+  }
+</style>  

@@ -45,7 +45,7 @@ export class PdfFormFillComponent {
 
         try {
             const bytes = await this.fetchPdf();
-            this.download(new Blob([bytes], { type: 'application/pdf' }), 'FormFillings.pdf');
+            this.download(new Blob([bytes.buffer as ArrayBuffer], { type: 'application/pdf' }), 'FormFillings.pdf');
         } finally {
             // Ensure the flag is cleared even if fetch/download throws
             this.viewBusy = false;

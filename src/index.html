@@ -18,7 +18,7 @@
 
     <link href="./styles/bootstrap.min.css" rel="stylesheet" />
     <link href="./styles/roboto.css" rel="stylesheet" />
-    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet"></link>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet" />
     <link href="./styles/tailwind3.css" rel="stylesheet" id="themelink" />
     <link href="./styles/index.css" rel="stylesheet" />
     <link href="./styles/codemirror/codemirror.css" rel="stylesheet" />
@@ -28,7 +28,19 @@
     crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/reflect-metadata/0.1.10/Reflect.min.js" integrity="sha512-OYt1EpazBm0ORZtTDaECuDh4c3FkHOrspDpJPV5BstRc87qIfWfOUTe/CuzJaobGxlBinyhLEn7PjjuS947i0w=="
     crossorigin="anonymous"></script>
-    <script src="https://cdn.syncfusion.com/scripts/common/pagevisit/subdomain-pagevisit.min.js" defer></script>
+    <script src="https://cdn.syncfusion.com/scripts/common/pagevisit/subdomain-pagevisit-v1.min.js" defer></script>
+    <!-- Conditionally add nofollow, noindex for non-production URLs -->
+    <script>
+      (function () {
+        var productionUrl = 'https://document.syncfusion.com/';
+        if (!window.location.href.startsWith(productionUrl)) {
+          var meta = document.createElement('meta');
+          meta.setAttribute('name', 'ROBOTS');
+          meta.setAttribute('content', 'nofollow, noindex');
+          document.head.appendChild(meta);
+        }
+      })();
+    </script>
     <script type="text/javascript">
         if (/MSIE \d|Trident.*rv:/.test(navigator.userAgent)) {
             document.write('<script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js" integrity="sha512-qTXRIMyZIFb8iQcfjXWCO8+M5Tbc38Qi5WzdPOYZHIlZpzBHG3L3by84BBBOiRGiEb7KKtAOAs5qYdUiZiQNNQ==" crossorigin="anonymous"><\/script>');
@@ -288,6 +300,18 @@
     </div>
     <ng-app class="sb-content e-view"></ng-app>
     </div>
+	<script>
+        function toggleThemeSwitcher() {
+            if(location.hash.includes('/pdf/')){
+                const themeSwitcher = document.getElementById('header-theme-switcher');
+                if (themeSwitcher) {
+                    themeSwitcher.style.display = 'none';
+                }
+            }
+        }
+        window.addEventListener('hashchange', toggleThemeSwitcher);
+        document.addEventListener('DOMContentLoaded', toggleThemeSwitcher);
+    </script>
     <script>
         // Hide the "FREE TRIAL" button on localhost
         if (window.location.hostname === "localhost") {

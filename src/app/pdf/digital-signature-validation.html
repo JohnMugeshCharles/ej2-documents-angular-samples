@@ -1,0 +1,68 @@
+<style>
+    .tablediv {
+        font-size: 14px;
+    }
+
+    .rowdiv {
+        display: block;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+    }
+
+    .loading {
+        display: none;
+        margin-top: 10px;
+        color: #0078d4;
+    }
+
+    .error {
+        color: #d13438;
+        margin-top: 10px;
+    }
+
+    #resultTextArea {
+        height: 225px;
+        width: 850px;
+    }
+</style>
+
+<div class="control-section">
+    <div class="tablediv" style="font-size: 14px">
+        <span class="rowdiv">
+            Click the button to validate the digital signature using JavaScript PDF Library.
+        </span>
+    </div>
+    <div class="tablediv" style="font-size: 14px">
+        <div class="rowdiv">
+            <div class="celldiv">
+                <table style="width: 100%">
+                    <tr>
+                        <td align="left">
+                            <br />
+                            <button type="button" class="e-btn" id="validateBtn" (click)="validateSignature()">
+                                Validate Signature
+                            </button>
+                            <div class="error" id="errorMsg"></div>
+                        </td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+    </div>
+    <br />
+    <textarea class="e-input" id="resultTextArea" readonly></textarea>
+</div>
+
+<div id="action-description">
+    <p>This sample demonstrates how to validate the digital signatures in existing PDF document.</p>
+</div>
+
+<div id="description">
+    <p>
+        This feature can be used to validate the digital signatures in an existing PDF document. More information about digital signature can be found in this documentation <a
+            href="https://help.syncfusion.com/document-processing/pdf/pdf-library/javascript/digitalsignature">section</a>.
+    </p>
+</div>

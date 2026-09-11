@@ -1,0 +1,75 @@
+<div class="control-section" style="padding: 20px; background-color: #f4f6f9;">
+    <!-- Header -->
+    <div
+        style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; padding: 16px 20px; background: #ffffff; border-radius: 12px; box-shadow: 0 2px 10px rgba(0,0,0,0.08); border: 1px solid #e5e7eb; font-family: Inter, sans-serif;">
+        <div>
+            <div style="margin-top: 8px; display: flex; align-items: center; gap: 8px;">
+                <span
+                    [style.background]="roleInfo.badgeBg"
+                    [style.color]="roleInfo.badgeColor"
+                    style="padding: 4px 10px; border-radius: 20px; font-size: 11px; font-weight: 600; text-align: center;">
+                    {{ roleInfo.badge }}
+                </span>
+                <span style="font-size: 13px; color: #6b7280;">
+                    {{ roleInfo.text }}
+                </span>
+            </div>
+        </div>
+
+        <div style="width: 240px;">
+            <ejs-dropdownlist #userDropdown id="userDropdown" [dataSource]="userOptions"
+                [fields]="userFields" [value]="selectedRole" (change)="onRoleChange($event)"
+                popupHeight="120px">
+            </ejs-dropdownlist>
+        </div>
+    </div>
+
+    <!-- PDF Viewer -->
+    <div
+        style="background: #fff; border-radius: 12px; overflow: hidden; box-shadow: 0 4px 18px rgba(0,0,0,0.08); border: 1px solid #e5e7eb;">
+        <ejs-pdfviewer #pdfviewer id="pdfViewer" [documentPath]="document" [resourceUrl]="resource"
+            (documentLoad)="onDocumentLoaded($event)" style="height: 500px; display: block; width: 100%;">
+        </ejs-pdfviewer>
+    </div>
+</div>
+
+<div id="action-description">
+    <p>
+        This sample demonstrates role-based access control in the PDF Viewer. The <b>User</b> dropdown
+        allows switching between <b>Admin</b>, <b>User</b>, and <b>Read-Only User</b> roles. When a
+        document is loaded, the permissions associated with the selected role are applied dynamically
+        to the viewer.
+    </p>
+</div>
+
+<div id="description">
+    <ul>
+        <li>
+            <b>Admin</b>: Has full access to annotations, form fields, text selection, page
+            organization, download, and all toolbar actions.
+        </li>
+        <li>
+            <b>User</b>: Can create annotations, edit their own annotations, and reply to
+            annotations created by others. Annotations created by other users remain locked.
+        </li>
+        <li>
+            <b>Read-Only User</b>: Can view documents and annotations only. Annotation creation
+            and modification, form interactions, text selection, download, and page organization
+            are restricted. The toolbar is limited to viewing and navigation tools.
+        </li>
+    </ul>
+    <p>
+        Role-based access is managed through PDF Viewer APIs such as <code>annotationSettings</code>,
+        <code>formFieldCollections</code>, <code>toolbarSettings</code>, <code>enableDownload</code>,
+        and <code>enablePageOrganizer</code>, which control annotation permissions, form field access,
+        toolbar availability, document download, and page organization features. The viewer UI is
+        updated immediately whenever the active role changes.
+    </p>
+    <p>
+        For more information about configuring and managing role-based permissions in the PDF
+        Viewer, refer to the
+        <a target="_blank"
+            href="https://help.syncfusion.com/document-processing/pdf/pdf-viewer/angular/overview">PDF
+            Viewer Permissions documentation</a>.
+    </p>
+</div>

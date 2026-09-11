@@ -10,8 +10,8 @@
     <div>
         <div id="default_title_bar" class="e-de-ctn-title"></div>
         <div>
-            <ejs-documenteditorcontainer #documenteditor_default [enableToolbar]=true [locale]="culture" [documentEditorSettings]="settings" [toolbarMode]="'Ribbon'" (created)="onCreate()" [showPropertiesPane]=false
-                (documentChange)="onDocumentChange()" (commentDelete)="commentDelete($event)" height="600px" [serviceUrl]="hostUrl" style="display:block;" currentUser = "Nancy Davolio" userColor="#b70f34"></ejs-documenteditorcontainer>
+            <ejs-documenteditorcontainer #documenteditor_default id="container" [enableToolbar]=true [locale]="culture" [documentEditorSettings]="settings" [toolbarMode]="'Ribbon'" (created)="onCreate()" [showPropertiesPane]=false
+                (documentChange)="onDocumentChange()" (commentDelete)="commentDelete($event)" height="600px" [serviceUrl]="hostUrl" style="display:block;" currentUser = "Nancy Davolio" userColor="#b70f34"  [fileMenuItems]="fileMenuItems" (fileMenuItemClick)="fileMenuItemClick($event)"></ejs-documenteditorcontainer>
         </div>
     </div>
 </div>
@@ -25,6 +25,7 @@
             <li>Add or edit a comment.</li>
             <li>Reply to a comment.</li>
             <li>Resolving the comment discussion.</li>
+            <li>Enable author-based color highlighting for comment markers, selected comments, and comment pane borders.</li>
         </ul>
         <p style="display: block"> More information about the document editor features can be found in this <a
              target="_blank" href="https://help.syncfusion.com/document-processing/word/word-processor/angular/comments">documentation

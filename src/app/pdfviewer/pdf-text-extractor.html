@@ -1,0 +1,172 @@
+<div class="control-section">
+  <div class="content-wrapper">
+    <input id="fileUpload" type="file" accept=".pdf" style="display:none" />
+    <!-- Desktop Toolbar -->
+    <div id="desktopToolbarContainer" class="toolbar-wrapper">
+      <ejs-toolbar #desktopToolbar cssClass="e-pdf-toolbar" (clicked)="onDesktopToolbarClick($event)">
+        <e-items>
+          <e-item prefixIcon="e-icons e-folder" id="file_Open"></e-item>
+          <e-item prefixIcon="e-icons e-save" id="save"></e-item>
+          <e-item prefixIcon="e-icons e-chevron-left" id="previous_page" align="Center"></e-item>
+          <e-item prefixIcon="e-icons e-chevron-right" id="next_page" align="Center"></e-item>
+          <e-item prefixIcon="e-icons e-circle-remove" id="zoom_out" align="Center"></e-item>
+          <e-item prefixIcon="e-icons e-circle-add" id="zoom_in" align="Center"></e-item>
+          <e-item type="Separator" align="Center"></e-item>
+          <e-item prefixIcon="e-icons e-mouse-pointer" id="text_selection_tool" align="Center"></e-item>
+          <e-item prefixIcon="e-icons e-pan" id="pan_tool" align="Center"></e-item>
+          <e-item type="Separator" align="Center"></e-item>
+          <e-item align="Center" type="Input">
+            <ng-template #template>
+              <ejs-splitbutton id="desktopSelectArea" iconCss="e-icons e-frame-custom"
+                [items]="selectAreaItems" (click)="handleSelectArea()" (select)="onSelectAreaItemSelect($event)">
+              </ejs-splitbutton>
+            </ng-template>
+          </e-item>
+          <e-item prefixIcon="e-icons e-extract-page" id="extractText" align="Center"></e-item>
+          <e-item prefixIcon="e-icons e-print" id="print" align="Right"></e-item>
+        </e-items>
+      </ejs-toolbar>
+    </div>
+
+    <!-- Mobile Toolbar -->
+    <div id="mobileToolbarContainer" class="e-pdf-toolbar" style="display:none">
+      <ejs-toolbar #mobileToolbar cssClass="e-pdf-toolbar" overflowMode="Scrollable" (clicked)="onMobileToolbarClick($event)">
+        <e-items>
+          <e-item prefixIcon='e-icons e-chevron-left' id="mobilePreviousPage" tooltipText="Previous Page" align="Center" (click)="onPrevPageClick($event)"></e-item>
+          <e-item prefixIcon='e-icons e-chevron-right' id="mobileNextPage" tooltipText="Next Page" align="Center" (click)="onNextPageClick($event)"></e-item>
+          <e-item prefixIcon='e-icons e-zoom-in' id="mobileZoomIn" tooltipText="Zoom In" align="Center" (click)="onZoomInClick($event)"></e-item>
+          <e-item prefixIcon='e-icons e-zoom-out' id="mobileZoomOut" tooltipText="Zoom Out" align="Center" (click)="onZoomOutClick($event)"></e-item>
+          <e-item prefixIcon='e-icons e-mouse-pointer' id="mobileSelection" tooltipText="Text Selection" align="Center" (click)="onTextSelectionClick($event)"></e-item>
+          <e-item prefixIcon='e-icons e-pan' id="mobilePan" tooltipText="Pan" align="Center" (click)="onPanClick($event)"></e-item>
+          <e-item align="Center" tooltipText="Select Area">
+            <ng-template #template>
+              <ejs-splitbutton #mobileSelectAreaBtn id="mobileSelectArea" cssClass="e-pdf-selectarea-split"
+                iconCss="e-icons e-frame-custom" [items]="selectAreaItems" (click)="handleSelectArea()"
+                (select)="onSelectAreaItemSelect($event)">
+              </ejs-splitbutton>
+            </ng-template>
+          </e-item>
+          <e-item prefixIcon='e-icons e-extract-page' id="mobileExtractText" tooltipText="Extract Text" align="Center" (click)="onExtractTextClick($event)"></e-item>
+          <e-item prefixIcon='e-icons e-print' id="mobilePrint" tooltipText="Print" align="Center" (click)="onPrintClick($event)"></e-item>
+        </e-items>
+      </ejs-toolbar>
+    </div>
+
+    <!-- PDF Viewer -->
+    <div id="container_wrapper">
+      <div id="pdfViewerContainer" style="height:640px;width:100%;">
+        <ejs-pdfviewer #pdfviewer id="pdfViewer" [documentPath]="document" [resourceUrl]="resource"
+          [enableToolbar]="false" [enableNavigationToolbar]="false" [enableAnnotationToolbar]="false"
+          [enableCommentPanel]="false" [contextMenuOption]="contextMenuOption" [rectangleSettings]="rectangleSettings"
+          (annotationAdd)="onAnnotationAdd($event)" (documentLoad)="onDocumentLoad($event)"
+          (documentUnload)="onDocumentUnload($event)" (pageChange)="onPageChange($event)" style="height:640px;display:block">
+        </ejs-pdfviewer>
+      </div>
+    </div>
+
+    <!-- Extract Text Dialog -->
+    <ejs-dialog #extractTextDialog id="extractTextDialog" [isModal]="true" [visible]="false"
+      [showCloseIcon]="true" [closeOnEscape]="true" width="560px" header="Extract Text" [buttons]="dialogButtons"
+      (open)="onDialogOpen($event)" (close)="onDialogClose($event)">
+      <ng-template #header>
+        <span class="e-dlg-header">Extract Text</span>
+      </ng-template>
+      <ng-template #content>
+        <div class="extract-container">
+          <div id="directExtractionOptions">
+            <div class="page-selector-wrap" style="flex:0 0 200px;width:200px;">
+              <ejs-multiselect #pageSelector id="pageSelector" width="200px" popupWidth="200px" popupHeight="250px"
+                mode="CheckBox" [showDropDownIcon]="true" [showSelectAll]="true" [showClearButton]="false"
+                [dataSource]="pageOptions" [fields]="pageFields" [value]="['current']"
+                (change)="onPageSelectionChange($event)">
+              </ejs-multiselect>
+            </div>
+            <span id="extractionStatusText" style="white-space:nowrap;font-size:13px;opacity:0.7;"></span>
+          </div>
+          <div class="e-card extract-card" style="overflow:hidden;">
+            <div class="e-card-header extract-card-header" style="display:flex;justify-content:flex-start;align-items:center;">
+              <span id="cardHeaderTitle" class="extract-card-title" style="flex:1;text-align:left;"></span>
+              <button type="button" id="dialogClipboardCopyBtn" class="extract-copy-btn" title="Copy to clipboard"
+                style="margin-left:auto;background:transparent;border:none;outline:none;box-shadow:none;padding:0;cursor:pointer;display:flex;align-items:center;justify-content:center;">
+                <span class="e-icons e-copy"></span>
+              </button>
+            </div>
+            <div id="dialogCardContentArea" class="e-card-content extract-card-content"
+              style="max-height:280px;overflow-y:auto;padding:16px;white-space:pre-wrap;word-break:break-word;line-height:1.6;">
+            </div>
+          </div>
+        </div>
+      </ng-template>
+    </ejs-dialog>
+  </div>
+</div>
+
+<div id="action-description">
+  <p>This sample demonstrates the text extraction features of PDF Viewer such as extracting text from the entire PDF
+    document, a specific page, or a selected area, and copying the extracted text to clipboard.</p>
+</div>
+<div id="description">
+  <p>The PDF Viewer component enables you to extract text content from PDF files. This sample demonstrates:</p>
+  <ul>
+    <li>Extract text from the entire PDF document</li>
+    <li>Extract text from a specific page</li>
+    <li>Extract text from a selected area using the Select Area toolbar button</li>
+    <li>Copy extracted text to clipboard</li>
+    <li>Core interactions &mdash; Scrolling, Zooming, Panning and Page Navigation</li>
+  </ul>
+  <p>More information on the PDF Viewer text extraction features can be found in this
+    <a target="_blank" href="https://help.syncfusion.com/document-processing/pdf/pdf-viewer/angular/how-to/extract-text">documentation section</a>.
+  </p>
+</div>
+
+<style>
+  .control-section { width: 100%; }
+  .content-wrapper { position: relative; }
+  .e-pdf-toolbar { border: none !important; background: transparent !important; box-shadow: none !important; }
+  .e-pdf-toolbar .e-toolbar-items { background: transparent !important; border: none !important; }
+  #container_wrapper { width: 100%; position: relative; }
+  .extract-disabled { opacity: 0.4 !important; pointer-events: none !important; cursor: not-allowed !important; }
+  #action-description, #description { margin-top: 10px; }
+  #action-description { border: none; background: transparent; color: inherit; padding: 0; margin: 10px 0; }
+  #description ul { margin: 8px 0; padding-left: 20px; }
+  #description li { margin-bottom: 6px; }
+  #description a { color: #3b82f6; text-decoration: none; }
+  #description a:hover { text-decoration: underline; }
+  #extractionStatusText { white-space: nowrap; font-size: 13px; opacity: 0.7; }
+  #desktopToolbarContainer, #mobileToolbarContainer { margin-bottom: 8px; }
+  #directExtractionOptions { display: flex; align-items: center; gap: 12px; }
+  #directExtractionOptions .e-multiselect,
+  #directExtractionOptions .e-control-wrapper,
+  #directExtractionOptions .e-input-group { width: 200px !important; }
+  .extract-card { overflow: hidden; }
+  .extract-card-header, .extract-card .e-card-header {
+    display: flex !important; justify-content: flex-start !important; align-items: center !important;
+  }
+  .extract-card-title { flex: 1; text-align: left !important; }
+  .extract-copy-btn {
+    margin-left: auto; background: transparent; border: none; outline: none; box-shadow: none;
+    padding: 0; cursor: pointer; display: flex; align-items: center; justify-content: center;
+  }
+  .extract-copy-btn:hover, .extract-copy-btn:focus, .extract-copy-btn:active {
+    background: transparent; border: none; outline: none; box-shadow: none;
+  }
+  .extract-card-content {
+    max-height: 280px; overflow-y: auto; padding: 16px; white-space: pre-wrap;
+    word-break: break-word; line-height: 1.6;
+  }
+  .extract-container { padding: 20px; display: flex; flex-direction: column; gap: 14px; }
+  .extract-card .e-card-header-caption, .extract-card .e-card-header-title { text-align: left !important; }
+  /* Highlight the active toolbar mode (Text Selection / Pan) on document load and clicks. */
+  #desktopToolbarContainer .e-pv-select,
+  #mobileToolbarContainer .e-pv-select {
+      background-color: rgba(0, 120, 212, 0.12);
+      border-radius: 4px;
+  }
+  #desktopToolbarContainer .e-pv-select .e-icons,
+  #mobileToolbarContainer .e-pv-select .e-icons {
+      color: #0078D4;
+  }
+  @media (max-width: 768px) {
+    #extractTextDialog .e-dlg-content { padding: 12px; }
+  }
+</style>

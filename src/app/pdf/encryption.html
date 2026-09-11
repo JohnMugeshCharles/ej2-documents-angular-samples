@@ -1,0 +1,168 @@
+<style>
+  .control-section {
+    padding: 12px;
+  }
+
+  .tablediv {
+    margin-top: 20px;
+  }
+
+  .form-group label {
+    font-weight: 600;
+  }
+
+  .radio-label {
+    display: inline-flex;
+    align-items: center;
+    margin-right: 10px;
+    margin-top: 7px;
+    cursor: pointer;
+    font-weight: normal;
+  }
+
+  .radio-label input[type="radio"] {
+    margin-right: 8px;
+    margin-top: -1px;
+    cursor: pointer;
+  }
+
+  /* Tighten spacing between radio items */
+  /* .form-group .e-radio-wrapper {
+    display: inline-flex;
+    align-items: center;
+  } */
+
+  .card {
+    border: 1px solid var(--e-border-color, #ddd);
+    border-radius: 4px;
+    margin-bottom: 16px;
+    background: transparent;
+  }
+
+  .card-title {
+    font-weight: 600;
+    padding: 10px 12px;
+    border-bottom: 1px solid var(--e-border-color, #eee);
+    background: transparent;
+  }
+
+  .e-label {
+    min-width: 200px;
+    color: inherit;
+    font-weight: bold;
+  }
+
+  .card-body {
+    padding: 12px;
+  }
+
+  .form-row {
+    display: flex;
+    align-items: center;
+    gap: 2px;
+    margin-bottom: 16px;
+    flex-wrap: wrap;
+  }
+
+  .form-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 12;
+    margin-bottom: 0px;
+    align-items: center;
+  }
+
+  input[type="text"],
+  input[type="password"],
+  input[type="file"] {
+    width: 300px;
+    max-width: 100%;
+    padding: 8px 12px;
+    border: 1px solid var(--e-border-color, #ccc);
+    border-radius: 4px;
+    font-size: 14px;
+    color: inherit;
+    box-sizing: border-box;
+  }
+
+  ejs-textbox {
+    width: 300px;
+  }
+
+  ejs-radiobutton {
+    max-width: 120px;
+  }
+
+  .create-btn-row {
+    display: flex;
+    gap: 12px;
+    margin-top: 10px;
+  }
+
+  #encryptPdfBtn {
+    width: auto !important;
+    min-width: 150px;
+  }
+</style>
+
+<div class="control-section">
+  <div style="font-size:14px">
+    <p>Click the button below to view a PDF created with JavaScript PDF Library. Please note that Adobe Reader or its
+      equivalent is required to view the resultant document.</p>
+  </div>
+
+  <div class="tablediv" style="font-size:14px">
+    <div class="card">
+      <div class="card-title">Encryption Settings</div>
+      <div class="card-body">
+        <div class="form-row">
+          <label class="e-label">Encryption Type:</label>
+          <div class="form-group">
+            <ejs-radiobutton label="40 Bit RC4" name="encryptionType" cssClass="radio-label first-label"
+              value="40_RC4"></ejs-radiobutton>
+            <ejs-radiobutton label="128 Bit RC4" name="encryptionType" cssClass="radio-label"
+              value="128_RC4"></ejs-radiobutton>
+            <ejs-radiobutton label="128 Bit AES" name="encryptionType" cssClass="radio-label" value="128_AES"
+              checked="true"></ejs-radiobutton>
+            <ejs-radiobutton label="256 Bit AES" name="encryptionType" cssClass="radio-label"
+              value="256_AES"></ejs-radiobutton>
+            <ejs-radiobutton label="256 Bit AES Revision 6" name="encryptionType" cssClass="radio-label"
+              value="256_AES_Revision_6"></ejs-radiobutton>
+          </div>
+        </div>
+
+        <div class="form-row">
+          <label class="e-label" for="userPassword">User Password:</label>
+          <ejs-textbox type="text" id="userPassword" placeholder="Enter user password" value="password"></ejs-textbox>
+        </div>
+
+        <div class="form-row">
+          <label class="e-label" for="ownerPassword">Owner Password:</label>
+          <ejs-textbox type="text" id="ownerPassword" placeholder="Enter owner password"
+            value="syncfusion"></ejs-textbox>
+        </div>
+
+        <div class="create-btn-row">
+          <button id="encryptPdfBtn" class="e-btn" (click)="encryptPdf()">
+            Encrypt PDF
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div id="action-description">
+    <p>
+      This sample demonstrates how to encrypt the PDF document with encryption standards like 40-bit RC4, 128-bit RC4,
+      128-bit AES, 256-bit AES Revision 6 (PDF 1.7 Extension Level 3) and advanced encryption standard 256-bit AES
+      Revision 6 (PDF 2.0) to protect documents against unauthorized access.
+    </p>
+  </div>
+  <div id="description">
+    <p>It is possible to protect with user password or owner password or both passwords and also possible to change or
+      remove password and permission. More information about JavaScript PDF Library can be found in this documentation
+      <a href="https://help.syncfusion.com/document-processing/pdf/pdf-library/javascript/overview"
+        style="text-decoration: none;">section</a>.
+    </p>
+  </div>
+</div>

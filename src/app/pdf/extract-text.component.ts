@@ -39,7 +39,7 @@ export class ExtractTextPdfComponent {
 
                 // Extract text from page range [0..pageCount-1]
                 // Note: extractText() returns a single concatenated string for the range
-                const text: string = extractor.extractText({
+                const text: string = extractor.extractTextSync({
                     startPageIndex: 0,
                     endPageIndex: pdf.pageCount - 1
                 });
@@ -66,7 +66,7 @@ export class ExtractTextPdfComponent {
             try {
                 const pdfBytes = await this.readFromPdfResources(this.templateURL);
                 // Download the PDF as-is for viewing
-                this.downloadBlob(new Blob([pdfBytes], { type: 'application/pdf' }), 'PDF_Succinctly.pdf');
+                this.downloadBlob(new Blob([pdfBytes.buffer as ArrayBuffer], { type: 'application/pdf' }), 'PDF_Succinctly.pdf');
             } catch (err) {
                 console.error('View Template failed:', err);
             }

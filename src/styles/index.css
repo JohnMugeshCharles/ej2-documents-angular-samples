@@ -6215,3 +6215,83 @@ cursor: pointer;
 #e-item-sb-content_2 {
     display: none;
 }
+
+.tailwind3-dark .sf-axe-msg.e-message,
+.bootstrap5\.3-dark .sf-axe-msg.e-message,
+.material3-dark .sf-axe-msg.e-message,
+.fluent2-dark .sf-axe-msg.e-message,
+.fluent2-highcontrast .sf-axe-msg.e-message {
+    color: #ffffff;
+    background-color: #0a3d62;
+    border: 1px solid #4fc3f7;
+}
+
+.tailwind3-dark .sf-axe-msg.e-message .e-msg-icon,
+.bootstrap5\.3-dark .sf-axe-msg.e-message .e-msg-icon,
+.material3-dark .sf-axe-msg.e-message .e-msg-icon,
+.fluent2-dark .sf-axe-msg.e-message .e-msg-icon,
+.fluent2-highcontrast .sf-axe-msg.e-message .e-msg-icon {
+    color: #ffffff;
+}
+
+.tailwind3-dark .sf-axe-msg.e-message a,
+.bootstrap5\.3-dark .sf-axe-msg.e-message a,
+.material3-dark .sf-axe-msg.e-message a,
+.fluent2-dark .sf-axe-msg.e-message a,
+.fluent2-highcontrast .sf-axe-msg.e-message a {
+    color: #b3e5fc;
+}
+
+.tailwind3-dark .sf-axe-msg.e-message #sf-axe-btn,
+.bootstrap5\.3-dark .sf-axe-msg.e-message #sf-axe-btn,
+.material3-dark .sf-axe-msg.e-message #sf-axe-btn,
+.fluent2-dark .sf-axe-msg.e-message #sf-axe-btn,
+.fluent2-highcontrast .sf-axe-msg.e-message #sf-axe-btn {
+    color: #ffffff;
+}
+
+.tailwind3-dark #sf-axe-btn,
+.fluent2-dark #sf-axe-btn,
+.bootstrap5\.3-dark #sf-axe-btn,
+.material3-dark #sf-axe-btn,
+.fluent2-highcontrast #sf-axe-btn {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.tailwind3-dark #sf-axe-btn:hover,
+.fluent2-dark #sf-axe-btn:hover,
+.bootstrap5\.3-dark #sf-axe-btn:hover,
+.material3-dark #sf-axe-btn:hover,
+.fluent2-highcontrast #sf-axe-btn:hover {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+.fluent2-highcontrast #sf-axe-btn:focus,
+.fluent2-highcontrast #sf-axe-btn:focus-visible,
+.tailwind3-dark #sf-axe-btn:focus,
+.tailwind3-dark #sf-axe-btn:focus-visible,
+.fluent2-dark #sf-axe-btn:focus,
+.fluent2-dark #sf-axe-btn:focus-visible,
+.bootstrap5\.3-dark #sf-axe-btn:focus,
+.bootstrap5\.3-dark #sf-axe-btn:focus-visible,
+.material3-dark #sf-axe-btn:focus,
+.material3-dark #sf-axe-btn:focus-visible {
+    color: #ffffff;
+    text-decoration: underline;
+    outline: none;
+}
+
+.fluent2-dark #sf-axe-btn:active,
+.tailwind3-dark #sf-axe-btn:active,
+.bootstrap5\.3-dark #sf-axe-btn:active,
+.material3-dark #sf-axe-btn:active,
+.fluent2-highcontrast #sf-axe-btn:active {
+    color: #ffffff;
+    text-decoration: underline;
+}
+
+ #sf-axe-btn {
+    padding-left: 2px !important;
+ }

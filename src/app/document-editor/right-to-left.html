@@ -11,21 +11,27 @@
         
         <div id="default_title_bar" class="e-de-ctn-title"></div>
         <div>
-            <ejs-documenteditorcontainer #documenteditor_default [enableToolbar]=true [enableRtl]=true
+            <ejs-documenteditorcontainer #documenteditor_default id="container" [enableToolbar]=true [enableRtl]=true
                 [locale]="culture" [toolbarMode]="'Ribbon'" (created)="onCreate()" (documentChange)="onDocumentChange()" height="600px" [serviceUrl]="hostUrl" 
-                style="display:block;"></ejs-documenteditorcontainer>
+                style="display:block;" [fileMenuItems]="fileMenuItems" (fileMenuItemClick)="fileMenuItemClick($event)"></ejs-documenteditorcontainer>
         </div>
     </div>
 </div>
 <div id="action-description">
-    <p>This example demonstrates bullets and numbering support in document editor. Both single list and multi-level
-        lists are supported. </p>
+    <b>Right To left</b>
+    <p>RTL provides an option to switch the text direction and layout of the editor component from right to left. It
+        improves the user experiences and accessibility for users who use right-to-left languages (Arabic, Farsi, Urdu,
+        etc.). To enable RTL document-editor, set the enableRtl to true.</p>
 </div>
 <div id="description">
-    <p>In this example, you can use, add, or modify the list formatting in document editor.</p>
+    <p>In this example, you can see document-editor right-to-left and the locale set in arabic[locale value is ar-AE]
+    </p>
+    <p>By default, locale value is en-US. If you want to change the en-US culture to a different culture, you have to
+        change the locale accordingly.</p>
 
     <p style="display: block"> More information about the document editor features can be found in this
-        <a target="_blank" href="https://help.syncfusion.com/document-processing/word/word-processor/angular/right-to-left">documentation
+        <a target="_blank"
+            href="https://help.syncfusion.com/document-processing/word/word-processor/angular/right-to-left">documentation
             section.</a>
     </p>
 </div>

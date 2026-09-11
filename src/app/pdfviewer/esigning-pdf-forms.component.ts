@@ -322,7 +322,7 @@ export class ESigningPdfFormsComponent implements OnInit {
       const byteNumbers = Array.from(slice, char => char.charCodeAt(0));
       byteArrays.push(new Uint8Array(byteNumbers));
     }
-    return new Blob(byteArrays, { type: contentType });
+    return new Blob(byteArrays as BlobPart[], { type: contentType });
   }
 
   public downloadDocument(blobUrl: string): void {

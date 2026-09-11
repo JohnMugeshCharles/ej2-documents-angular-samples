@@ -10,9 +10,9 @@
       </div>
       <div id="default_title_bar" class="e-de-ctn-title"></div>
       <div>
-        <ejs-documenteditorcontainer #documenteditor_default [enableToolbar]=true [toolbarMode]="'Ribbon'" [enableSpellCheck]=true
+        <ejs-documenteditorcontainer #documenteditor_default id="container" [enableToolbar]=true [toolbarMode]="'Ribbon'" [enableSpellCheck]=true
           (created)="onCreate()" (documentChange)="onDocumentChange()" (selectionChange)="onSelectionChange()"
-          height="600px" [serviceUrl]="hostUrl" style="display:block;">
+          height="600px" [serviceUrl]="hostUrl" style="display:block;" [fileMenuItems]="fileMenuItems" (fileMenuItemClick)="fileMenuItemClick($event)">
         </ejs-documenteditorcontainer>
       </div>
     </div>

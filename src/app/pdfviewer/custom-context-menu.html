@@ -1,53 +1,125 @@
 <div id="action-description">
     <p>Explore how to tailor context menus for PDF pages, annotations, and form fields in this sample.</p>
 </div>
+
 <div class="col-lg-9 control-section pdfviewer-control-section">
     <div class="content-wrapper">
-        <ejs-pdfviewer #pdfviewer id="pdfViewer" [documentPath]='document' [resourceUrl]='resource'
-            (documentLoad)='documentLoaded($event)' (customContextMenuBeforeOpen)='customContextMenuBeforeOpen($event)'
-            (customContextMenuSelect)='customContextMenuSelect($event)'
-            style="height:640px;display:block"></ejs-pdfviewer>
+        <ejs-pdfviewer #pdfviewer id="pdfViewer" [documentPath]="document" [resourceUrl]="resource"
+            (documentLoad)="documentLoaded($event)" (customContextMenuBeforeOpen)="customContextMenuBeforeOpen($event)"
+            (customContextMenuSelect)="customContextMenuSelect($event)" (textSelectionEnd)="textSelectionEnd($event)"
+            style="height: 640px; display: block">
+        </ejs-pdfviewer>
     </div>
 </div>
+
 <div class="col-lg-3 pdfviewer-property-section">
     <div class="pdfviewer-property-container">
         <h5><b>Properties</b></h5>
     </div>
-    <table>
-        <tr>
-            <td class="pdfviewer-contextmenu-checkbox-label">Hide Default Context Menu</td>
-            <td><ejs-checkbox id="hide" #hide [checked]="false" (change)="contextmenuHelper($event)"></ejs-checkbox>
-            </td>
-        </tr>
-        <tr>
-            <td class="pdfviewer-contextmenu-checkbox-label">Add Custom option at bottom</td>
-            <td><ejs-checkbox id="toolbar" #toolbar [checked]="false"
-                    (change)="contextmenuHelper($event)"></ejs-checkbox></td>
-        </tr>
+
+    <table style="width: 100%;">
+        <tbody>
+            <tr>
+                <td class="pdfviewer-contextmenu-checkbox-label">Hide Default Context Menu</td>
+                <td>
+                    <ejs-checkbox id="hide" #hide [checked]="false" (change)="contextmenuHelper($event)">
+                    </ejs-checkbox>
+                </td>
+            </tr>
+            <tr>
+                <td class="pdfviewer-contextmenu-checkbox-label">Add Custom option at bottom</td>
+                <td>
+                    <ejs-checkbox id="toolbar" #toolbar [checked]="false" (change)="contextmenuHelper($event)">
+                    </ejs-checkbox>
+                </td>
+            </tr>
+
+            <tr [style.display]="showCategorySelects ? '' : 'none'">
+                <td colspan="2">
+                    <div class="pdfviewer-contextmenu-multiselect">
+                        <label class="pdfviewer-contextmenu-label">Annotation Options:</label>
+                        <ejs-multiselect #annotationSelect id="annotation-menu-select" [dataSource]="annotationData"
+                            [fields]="multiSelectFields" [value]="annotationSelectedIds" mode="CheckBox"
+                            [showSelectAll]="false" [showDropDownIcon]="true" placeholder="Select annotation options"
+                            (change)="handleCategoryChange()">
+                        </ejs-multiselect>
+
+                        <label class="pdfviewer-contextmenu-label pdfviewer-contextmenu-category-label">
+                            Text Selection Options:
+                        </label>
+                        <ejs-multiselect #textSelectionSelect id="text-selection-menu-select"
+                            [dataSource]="textSelectionData" [fields]="multiSelectFields"
+                            [value]="textSelectionSelectedIds" mode="CheckBox" [showSelectAll]="false"
+                            [showDropDownIcon]="true" placeholder="Select text selection options"
+                            (change)="handleCategoryChange()">
+                        </ejs-multiselect>
+
+                        <label class="pdfviewer-contextmenu-label pdfviewer-contextmenu-category-label">
+                            Form Fields Options:
+                        </label>
+                        <ejs-multiselect #formFieldsSelect id="form-fields-menu-select" [dataSource]="formFieldsData"
+                            [fields]="multiSelectFields" [value]="formFieldsSelectedIds" mode="CheckBox"
+                            [showSelectAll]="false" [showDropDownIcon]="true" placeholder="Select form fields options"
+                            (change)="handleCategoryChange()">
+                        </ejs-multiselect>
+
+                        <button ejs-button id="apply-menu-btn" cssClass="e-primary"
+                            class="pdfviewer-contextmenu-customize-button" (click)="applyContextMenu()">
+                            Customize
+                        </button>
+                    </div>
+                </td>
+            </tr>
+        </tbody>
     </table>
 </div>
 
 <div id="description">
     <p>
-        This customization empowers users to add new context menus on PDF pages, annotations, and form fields. In this sample:
+        This customization empowers users to add new context menus on PDF pages, annotations, and form fields.
+        In this sample:
     </p>
     <ul>
-        <li>Selecting text on pages reveals a custom context menu, enabling users to search for the selected text on Google.</li>
-        <li>Annotations and Form Fields can be locked directly from the context menu.</li>
+        <li>
+            Selecting text on pages reveals custom context-menu options that let users search for the selected
+            text on Google or add a rectangle annotation around the selection.
+        </li>
+        <li>Annotations can be locked or unlocked directly from the context menu.</li>
+        <li>Form fields can be made read-only or editable directly from the context menu.</li>
+        <li>
+            When custom options are positioned at the bottom, the category selectors let users choose which
+            annotation, text-selection, and form-field actions are included.
+        </li>
         <li>Customization is achieved using the following APIs:</li>
         <ul>
-            <li>Customize the context menu by selectively displaying custom options, hiding existing menu items, controlled by boolean parameters in the <code>addCustomMenu()</code> method.</li>
-            <li>Position custom menu items either above or below existing ones, adjusting boolean parameters in the <code>addCustomMenu()</code> method.</li>
-            <li>Tailor the visibility of custom menu items using the <code>customContextMenuBeforeOpen</code> event.</li>
-            <li>Implement specific functionalities for custom options through the <code>customContextMenuSelect</code> event.</li>
+            <li>
+                Customize the context menu by selectively displaying custom options and hiding existing menu
+                items using the boolean parameters of the <code>addCustomMenu()</code> method.
+            </li>
+            <li>
+                Position custom menu items above or below existing items using the final boolean parameter of
+                the <code>addCustomMenu()</code> method.
+            </li>
+            <li>
+                Tailor the visibility of custom menu items using the
+                <code>customContextMenuBeforeOpen</code> event.
+            </li>
+            <li>
+                Implement custom actions using the <code>customContextMenuSelect</code> event.
+            </li>
         </ul>
-    </ul> 
+    </ul>
+
     <p>
-        More information on the PDF Viewer instantiation can be found in this
-        <a target="_blank" href="https://help.syncfusion.com/document-processing/pdf/pdf-viewer/angular/getting-started">
-        documentation section</a>.
-        Looking for the full Angular PDF Viewer component overview, features, pricing, and documentation? Visit the
-        <a target="_blank" href="https://www.syncfusion.com/pdf-viewer-sdk/angular-pdf-viewer">
-        Angular PDF Viewer</a> Page.
+        More information on PDF Viewer instantiation is available in the
+        <a target="_blank" rel="noopener noreferrer"
+            href="https://help.syncfusion.com/document-processing/pdf/pdf-viewer/angular/getting-started">
+            Angular PDF Viewer getting-started documentation
+        </a>.
+        For the component overview, features, pricing, and documentation, visit the
+        <a target="_blank" rel="noopener noreferrer"
+            href="https://www.syncfusion.com/pdf-viewer-sdk/angular-pdf-viewer">
+            Angular PDF Viewer page
+        </a>.
     </p>
 </div>

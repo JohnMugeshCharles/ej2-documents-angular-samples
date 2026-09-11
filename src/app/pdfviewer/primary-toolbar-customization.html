@@ -1,0 +1,712 @@
+<div class="control-section">
+    <div class="content-wrapper">
+        <div class="sample-container">
+            <div class="viewer-section">
+                <ejs-pdfviewer #pdfviewer id="pdfViewer" [documentPath]="document" [resourceUrl]="resource" [showNotificationDialog]="false"
+                    [toolbarSettings]="toolbarSettings" (toolbarClick)="toolbarClick($event)" style="height:640px; width:100%;"></ejs-pdfviewer>
+                <input type="file" id="fileUpload" accept=".pdf" style="display:none;" />
+            </div>
+            <div class="property-section">
+                <div class="property-panel-header">Select Toolbar Items</div>
+                <div class="toolbar-dropdown">
+                    <button id="toolbarDropdownButton" class="toolbar-dropdown-button" type="button"
+                        aria-expanded="false">
+                        <span id="toolbarDropdownText">7 selected</span>
+                        <span class="toolbar-dropdown-arrow">&#9662;</span>
+                    </button>
+                    <div id="toolbarItems" class="toolbar-checkbox-list toolbar-checkbox-popup">
+                        <label class="toolbar-checkbox-item"><input type="checkbox" value="OpenOption" checked>
+                            <span>Open</span></label>
+                        <label class="toolbar-checkbox-item"><input type="checkbox" value="PageNavigationTool" checked>
+                            <span>Previous Page / Next Page / Page Number</span></label>
+                        <label class="toolbar-checkbox-item"><input type="checkbox" value="MagnificationTool" checked>
+                            <span>Zoom In / Zoom Out</span></label>
+                        <label class="toolbar-checkbox-item"><input type="checkbox" value="AnnotationEditTool" checked>
+                            <span>Edit Annotation</span></label>
+                        <label class="toolbar-checkbox-item"><input type="checkbox" value="SearchOption" checked>
+                            <span>Text Search</span></label>
+                        <label class="toolbar-checkbox-item"><input type="checkbox" value="PrintOption" checked>
+                            <span>Print</span></label>
+                        <label class="toolbar-checkbox-item"><input type="checkbox" value="DownloadOption" checked>
+                            <span>Download</span></label>
+                    </div>
+                </div>
+                <button id="customizeToolbar" class="e-btn e-primary">Customize</button>
+                <div class="add-item-section">
+                    <div class="property-panel-header">Custom Toolbar Item</div>
+                    <div class="text-customization-container">
+                        <div class="style-group">
+                            <label class="dropdown-label">Select Item Type</label>
+                            <div class="e-input-group ptc-select-wrap">
+                                <select id="customItemType" class="e-dropdown-input ptc-select-input">
+                                    <option value="">-- Select Item Type --</option>
+                                    <option value="text">Add Text Button</option>
+                                    <option value="icon">Select Icon Button</option>
+                                </select>
+                                <span class="e-input-group-icon e-icons e-caret-down ptc-select-arrow"
+                                    aria-hidden="true"></span>
+                            </div>
+                        </div>
+                        <div id="textSection" style="display:none;">
+                            <button id="createTextButtonBtn" class="e-btn e-primary"
+                                style="width:100%;margin-top:8px;">
+                                Create Text Button
+                            </button>
+
+                            <div id="textSelectedSummary" class="selected-item-summary" style="display:none;">
+                                <div class="style-label">Selected Button</div>
+                                <div id="textSelectedName" class="selected-item-name"></div>
+                            </div>
+                        </div>
+                        <div id="iconSection" style="display:none;">
+                            <div class="icon-grid-scroll">
+                                <div id="iconGrid" class="icon-grid"></div>
+                            </div>
+
+                            <div id="iconSelectedSummary" class="selected-item-summary">
+                                <div class="style-label">Selected Icon</div>
+                                <div id="selectedIconDisplay">
+                                    <span class="e-icons e-edit"></span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="property-subheader">API Action</div>
+                    <div class="style-group">
+                        <div class="e-input-group ptc-select-wrap">
+                            <select id="apiDropdown" class="e-dropdown-input ptc-select-input">
+                                <option value="">-- Select API Action --</option>
+                                <option value="lockPdf">Lock Annotation</option>
+                                <option value="flattenPdf">Flatten PDF</option>
+                                <option value="addWatermark">Add Watermark</option>
+                            </select>
+                            <span class="e-input-group-icon e-icons e-caret-down ptc-select-arrow"
+                                aria-hidden="true"></span>
+                        </div>
+                    </div>
+                    <button id="addToolbarButton" class="e-btn e-success" style="width:100%;margin-top:12px;">
+                        ADD BUTTON
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<div id="textButtonModal" class="ptc-modal-backdrop" style="display:none;">
+    <div class="ptc-modal">
+        <div class="ptc-modal-header">Create Custom Text Button</div>
+        <div class="ptc-modal-body">
+            <div class="style-group">
+                <label class="dropdown-label">Button Name</label>
+                <input id="buttonLabelInput" type="text" class="e-dropdown-input"
+                    placeholder="Enter button name">
+            </div>
+
+            <div class="style-group">
+                <label class="dropdown-label">Tooltip</label>
+                <input id="tooltipTextInput" type="text" class="e-dropdown-input"
+                    placeholder="Enter tooltip">
+            </div>
+
+            <div class="style-group">
+                <label class="dropdown-label">Font Size</label>
+                <input id="fontSizeInput" type="number" value="14" min="10" max="30"
+                    class="e-dropdown-input">
+            </div>
+
+            <div class="style-group">
+                <label class="dropdown-label">Text Color</label>
+                <input id="fontColorInput" type="color" value="#ffffff" class="color-input">
+            </div>
+
+            <div class="style-group">
+                <label class="dropdown-label">Background Color</label>
+                <input id="backgroundColorInput" type="color" value="#0d6efd" class="color-input">
+            </div>
+
+            <div class="style-group">
+                <label class="dropdown-label">Border Color</label>
+                <input id="borderColorInput" type="color" value="#000000" class="color-input">
+            </div>
+
+            <div class="style-group">
+                <label class="dropdown-label">Live Preview</label>
+                <div id="buttonPreview" class="text-placeholder-preview">Custom Button</div>
+            </div>
+        </div>
+        <div class="ptc-modal-footer">
+            <button id="popupCancelButton" class="e-btn" type="button">Cancel</button>
+            <button id="popupCreateButton" class="e-btn e-primary" type="button">Create</button>
+        </div>
+    </div>
+</div>
+
+<div id='action-description'>
+    <p>This sample demonstrates how to customize the primary toolbar in the PDF Viewer by selecting a specific set of
+        visible items and creating your own custom buttons mapped to viewer APIs.</p>
+</div>
+
+<div id='description'>
+    <p>
+        This sample shows a PDF Viewer with a configurable primary toolbar. Use the checkbox drop-down to choose which
+        toolbar items should be shown, then click <b>Customize</b> to apply the selection.
+    </p>
+    <p>
+        You can also add a custom toolbar item: pick <b>Add Text Button</b> to configure a styled label inside the
+        popup, or <b>Select Icon Button</b> to pick from a scrollable icon grid. Then choose an <b>API Action</b> such
+        as Lock PDF, Flatten PDF, or Add Watermark, and click <b>ADD BUTTON</b> to attach it to the viewer toolbar.
+    </p>
+    <p>
+        Available toolbar items in this sample are Open, Page Navigation, Magnification, Edit Annotation, Text Search,
+        Print, and Download.
+    </p>
+    <p>
+        More information on the PDF Viewer toolbar customization can be found in this
+        <a target="_blank"
+            href="https://help.syncfusion.com/document-processing/pdf/pdf-viewer/angular/toolbar-customization/overview">documentation
+            section</a>.
+    </p>
+</div>
+<style>
+    .text-customization-container {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+    }
+
+    .property-subheader {
+        font-size: 15px;
+        font-weight: 600;
+        margin-top: 18px;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    #selectedIconDisplay {
+        text-align: center;
+        margin-top: 8px;
+        font-size: 30px;
+        color: #0d6efd;
+    }
+
+    .sample-container {
+        display: flex;
+        gap: 24px;
+        align-items: flex-start;
+    }
+
+    .viewer-section {
+        width: 70%;
+        flex: 0 0 70%;
+        min-width: 0;
+        order: 1;
+    }
+
+    .property-section {
+        width: 22%;
+        flex: 0 0 30%;
+        order: 2;
+    }
+
+    .property-panel-header {
+        font-size: 18px;
+        font-weight: 600;
+        margin-bottom: 12px;
+    }
+
+    .toolbar-checkbox-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+        padding: 16px;
+        border: 1px solid #d7d7d7;
+        border-radius: 8px;
+        background-color: #fff;
+    }
+
+    .toolbar-dropdown {
+        position: relative;
+        width: 100%;
+    }
+
+    .toolbar-dropdown-button {
+        width: 100%;
+        min-height: 44px;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 14px;
+        font-size: 15px;
+        cursor: pointer;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        font-weight: 500;
+        color: #333;
+    }
+
+    .toolbar-dropdown-button:hover {
+        border-color: #0d6efd;
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.15);
+        background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+        transform: translateY(-1px);
+    }
+
+    .toolbar-dropdown-button:focus {
+        outline: none;
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1);
+    }
+
+    .toolbar-dropdown-button.open {
+        border-color: #0d6efd;
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.2);
+    }
+
+    .toolbar-dropdown-arrow {
+        font-size: 12px;
+        color: #666;
+        transition: all 0.3s ease;
+    }
+
+    .toolbar-dropdown.open .toolbar-dropdown-arrow {
+        color: #0d6efd;
+        transform: rotate(180deg);
+    }
+
+    .toolbar-checkbox-popup {
+        position: absolute;
+        top: calc(100% + 8px);
+        left: 0;
+        right: 0;
+        max-height: 320px;
+        overflow-y: auto;
+        z-index: 10;
+        display: none;
+        box-shadow: 0 12px 32px rgba(0, 0, 0, 0.15);
+        background: #fff;
+        border-radius: 8px;
+        border: 1px solid #e5e5e5;
+        animation: slideDownIn 0.2s ease-out;
+    }
+
+    @keyframes slideDownIn {
+        from {
+            opacity: 0;
+            transform: translateY(-8px);
+        }
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .toolbar-dropdown.open .toolbar-checkbox-popup {
+        display: flex;
+    }
+
+    .toolbar-checkbox-item {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        font-size: 14px;
+        cursor: pointer;
+        padding: 10px 12px;
+        border-radius: 6px;
+        transition: all 0.2s ease;
+        color: #333;
+        user-select: none;
+    }
+
+    .toolbar-checkbox-item:hover {
+        background-color: #f0f7ff;
+        color: #0d6efd;
+    }
+
+    .toolbar-checkbox-item input {
+        margin: 0;
+        cursor: pointer;
+        accent-color: #0d6efd;
+    }
+
+    #customizeToolbar {
+        margin-top: 16px;
+        margin-bottom: 8px;
+        width: 100%;
+        box-sizing: border-box;
+        transition: all 0.3s ease;
+        text-transform: none;
+        letter-spacing: normal;
+    }
+
+    #customizeToolbar:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(13, 110, 253, 0.2);
+    }
+
+    #customizeToolbar:active {
+        transform: translateY(0);
+    }
+
+    #toolbarItems {
+        width: 100%;
+    }
+
+    .dropdown-label {
+        display: block;
+        font-size: 14px;
+        font-weight: 500;
+        margin-bottom: 8px;
+        color: #333;
+    }
+
+    .e-dropdown-input {
+        width: 100%;
+        padding: 8px 12px;
+        border: 1px solid #c8c8c8;
+        border-radius: 4px;
+        font-size: 14px;
+        font-family: inherit;
+        background-color: #fff;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+
+    .e-dropdown-input:focus {
+        outline: none;
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+    }
+
+    /* Syncfusion-style select wrapper (normal dropdown look) */
+    .ptc-select-wrap {
+        position: relative;
+        display: flex;
+        align-items: stretch;
+        width: 100%;
+        border: 2px solid #e0e0e0;
+        border-radius: 8px;
+        background: linear-gradient(135deg, #ffffff 0%, #f8f9fa 100%);
+        transition: all 0.3s ease;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.06);
+    }
+
+    .ptc-select-wrap:hover {
+        border-color: #0d6efd;
+        box-shadow: 0 4px 12px rgba(13, 110, 253, 0.12);
+        background: linear-gradient(135deg, #ffffff 0%, #f0f7ff 100%);
+    }
+
+    .ptc-select-wrap:focus-within {
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.1), 0 4px 12px rgba(13, 110, 253, 0.12);
+    }
+
+    .ptc-select-input {
+        appearance: none;
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        border: none !important;
+        box-shadow: none !important;
+        background: transparent;
+        padding: 10px 34px 10px 12px !important;
+        flex: 1;
+        font-size: 14px;
+        font-weight: 500;
+        color: #333;
+        cursor: pointer;
+    }
+
+    .ptc-select-input option {
+        padding: 10px;
+        background: #fff;
+        color: #333;
+        font-weight: 500;
+    }
+
+    .ptc-select-input:focus {
+        outline: none;
+        border: none !important;
+        box-shadow: none !important;
+    }
+
+    .ptc-select-arrow {
+        position: absolute;
+        right: 8px;
+        top: 50%;
+        transform: translateY(-50%);
+        font-size: 12px;
+        color: #0d6efd;
+        pointer-events: none;
+        transition: all 0.3s ease;
+        font-weight: 600;
+    }
+
+    .ptc-select-wrap:hover .ptc-select-arrow {
+        color: #0d6efd;
+    }
+
+    /* Scrollable icon grid */
+    .icon-grid-scroll {
+        border: 1px solid #d7d7d7;
+        border-radius: 4px;
+        padding: 8px;
+        background-color: #fafafa;
+        max-height: 200px;
+        overflow-y: auto;
+    }
+
+    .icon-grid {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 8px;
+    }
+
+    .icon-grid-item {
+        width: 100%;
+        aspect-ratio: 1;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border: 2px solid #d7d7d7;
+        background-color: #fff;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: all 0.2s ease;
+        font-size: 28px;
+        color: #333;
+    }
+
+    .icon-grid-item:hover {
+        background-color: #f0f8ff;
+        border-color: #0d6efd;
+        transform: scale(1.05);
+    }
+
+    .icon-grid-item.selected {
+        background-color: #0d6efd;
+        border-color: #0d6efd;
+        color: #fff;
+        box-shadow: 0 2px 8px rgba(13, 110, 253, 0.3);
+    }
+
+    .text-placeholder-preview {
+        width: 100%;
+        min-height: 50px;
+        padding: 12px;
+        margin-bottom: 16px;
+        border: 2px solid #333;
+        background-color: #fff;
+        font-size: 16px;
+        font-family: Arial;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 4px;
+        box-sizing: border-box;
+    }
+
+    .style-label {
+        font-size: 14px;
+        font-weight: 600;
+        color: #333;
+        margin-bottom: 4px;
+    }
+
+    .style-group {
+        display: flex;
+        flex-direction: column;
+        gap: 6px;
+    }
+
+    .color-input {
+        width: 100%;
+        height: 36px;
+        border: 1px solid #c8c8c8;
+        border-radius: 4px;
+        cursor: pointer;
+        box-sizing: border-box;
+    }
+
+    .color-input:focus {
+        outline: none;
+        border-color: #0d6efd;
+        box-shadow: 0 0 0 3px rgba(13, 110, 253, 0.25);
+    }
+
+    /* Mobile-first stacked layout */
+    .sample-container {
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+    }
+
+    .viewer-section,
+    .property-section {
+        width: 100%;
+        max-width: 100%;
+    }
+
+    /* Selected item summary under the active section */
+    .selected-item-summary {
+        margin-top: 12px;
+        padding: 10px 12px;
+        border-radius: 6px;
+        background: #f3f8ff;
+        border: 1px solid #0d6efd;
+    }
+
+    .selected-item-summary .style-label {
+        font-size: 13px;
+        margin-bottom: 4px;
+    }
+
+    .selected-item-name {
+        font-size: 15px;
+        font-weight: 600;
+        color: #0d6efd;
+        text-align: center;
+        margin-top: 4px;
+    }
+
+    #selectedIconDisplay {
+        text-align: center;
+        margin-top: 6px;
+        font-size: 26px;
+        color: #0d6efd;
+    }
+
+    /* Enhanced button styling */
+    .e-btn {
+        transition: all 0.3s ease;
+        font-weight: 600;
+        box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+        border-radius: 6px;
+    }
+
+    .e-btn:hover:not(:disabled) {
+        transform: translateY(-2px);
+        box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .e-btn:active:not(:disabled) {
+        transform: translateY(0);
+    }
+
+    .e-btn.e-primary {
+        background: linear-gradient(135deg, #0d6efd 0%, #0b5ed7 100%);
+    }
+
+    .e-btn.e-success {
+        background: linear-gradient(135deg, #198754 0%, #157347 100%);
+    }
+
+    /* Modal popup styling */
+    .ptc-modal-backdrop {
+        position: absolute;
+        inset: 0;
+        z-index: 10000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+
+    .ptc-modal {
+        background: #fff;
+        width: min(420px, 92vw);
+        max-height: 90vh;
+        overflow-y: auto;
+        border-radius: 8px;
+        box-shadow: 0 12px 36px rgba(0, 0, 0, 0.25);
+        display: flex;
+        flex-direction: column;
+    }
+
+    .ptc-modal-header {
+        padding: 14px 18px;
+        font-size: 16px;
+        font-weight: 600;
+        border-bottom: 1px solid #e0e0e0;
+        color: #333;
+    }
+
+    .ptc-modal-body {
+        padding: 16px 18px;
+        display: flex;
+        flex-direction: column;
+        gap: 12px;
+    }
+
+    .ptc-modal-footer {
+        padding: 12px 18px;
+        border-top: 1px solid #e0e0e0;
+        display: flex;
+        justify-content: flex-end;
+        gap: 10px;
+    }
+
+    /* Generic field validation message inside modal */
+    .ptc-field-error {
+        color: #d93025;
+        font-size: 13px;
+        margin-top: 4px;
+        display: none;
+    }
+
+    .ptc-field-error.visible {
+        display: block;
+    }
+
+    /* Responsive: side-by-side on wide screens */
+    @media screen and (min-width: 801px) {
+        .sample-container {
+            flex-direction: row;
+            align-items: flex-start;
+            gap: 24px;
+        }
+
+        .viewer-section {
+            flex: 0 0 70%;
+            max-width: 70%;
+        }
+
+        .property-section {
+            flex: 0 0 30%;
+            max-width: 23%;
+        }
+    }
+
+    @media screen and (max-width: 800px) {
+        .viewer-section {
+            order: 1;
+            width: 100%;
+        }
+
+        .property-section {
+            order: 2;
+            width: 100%;
+            padding: 0 16px;
+        }
+
+        .toolbar-dropdown {
+            width: 100%;
+        }
+
+        #customizeToolbar {
+            width: 100%;
+        }
+
+        .text-customization-container {
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        #pdfViewer {
+            height: 500px !important;
+        }
+    }
+</style>
